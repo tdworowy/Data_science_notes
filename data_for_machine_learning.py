@@ -23,7 +23,7 @@ pickle.dump(mnist, open("mnist.pickle",'wb'))
 
 target_page = 'http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/ijcnn1.bz2'
 with urllib.request.urlopen(target_page) as response:
-    with open('jjcnn1.bz2','wb') as W:
+    with open('ijcnn1.bz2','wb') as W:
         W.write(response.read())
 
 
