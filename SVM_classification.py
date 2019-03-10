@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[4]:
+# In[1]:
 
 
 #support-vector machines
@@ -12,7 +12,7 @@ first_rows = 5000
 X_train, y_train = X_train[:first_rows,:], y_train[:first_rows]
 
 
-# In[10]:
+# In[2]:
 
 
 import numpy as np
@@ -24,7 +24,7 @@ print('SVC with rbf function -> accuracy in corss validation:\nmean= %f\nstandar
       %(np.mean(scores), np.std(scores)))
 
 
-# In[11]:
+# In[3]:
 
 
 #second example
@@ -34,7 +34,7 @@ covertype_X = covertype_dataset.data[:50000,:]
 covertype_Y = covertype_dataset.target[:50000] -1
 
 
-# In[13]:
+# In[4]:
 
 
 import numpy as np
@@ -44,7 +44,7 @@ print("Sample: ", covertype_X.shape)
 print("Frequency of target values: ", list(zip(covertypes, np.bincount(covertype_Y))))
 
 
-# In[20]:
+# In[5]:
 
 
 from sklearn.model_selection import StratifiedKFold
@@ -56,8 +56,17 @@ print('LinearSVC with rbf function -> accuracy in corss validation:\nmean= %f\ns
       %(np.mean(scores), np.std(scores))) # problem seems to be not linear but we use LinearSVC, still result is quite good
 
 
-# In[ ]:
+# In[6]:
 
 
-
+# Optimalization
+from sklearn.model_selection import GridSearchCV
+hypothesis = SVC(kernel='rbf', random_state=101, gamma='scale')
+search_dict = {'C':[0.001,0.01,0.1,1,10,100,1000],
+              'gamma':[1,0.1,0.01,0.001,0.0001]}
+search_funct = GridSearchCV(estimator=hypothesis, param_grid=search_dict,scoring='accuracy', n_jobs=-1, iid=True, 
+                           refit=True, cv=5)
+search_funct.fit(X_train, y_train)
+print("Best params: %s" % search_funct.best_params_)
+print("accuracy of cross-validation: mean = %f" %(search_funct.best_score_))
 
