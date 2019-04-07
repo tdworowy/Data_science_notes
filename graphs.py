@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 get_ipython().run_line_magic('matplotlib', 'inline')
@@ -64,12 +64,29 @@ for path in all_paths:
     print(path)
 
 
-# In[18]:
+# In[11]:
 
 
 paths = nx.all_pairs_shortest_path(G)
 for path in paths:
     print(path)
+
+
+# In[14]:
+
+
+import community.community_louvain as community
+#print(dir(community))
+G = nx.powerlaw_cluster_graph(100, 1, .4, seed=101)
+partition = community.best_partition(G)
+for i in set(partition.values()):
+    print("Society ",i)
+    members = list_nodes = [nodes for nodes in partition.keys() if partition[nodes] ==1]
+    print(members)
+values = [partition.get(node) for node in G.nodes()]
+nx.draw_spring(G, cmap=plt.get_cmap('jet'), node_color=values, node_size=30, with_labes=False)
+plt.show()
+print("Level of modularity: ", community.modularity(partition, G))
 
 
 # In[ ]:
