@@ -1,5 +1,5 @@
 import numpy as np
-from keras import models, layers
+from keras import models, layers, regularizers
 from keras.datasets import imdb
 
 from vizualization import plt_loos, plt_accuracy
@@ -27,10 +27,14 @@ x_test = vectorized_sequences(test_data)
 y_train = np.asarray(train_labels)
 y_test = np.asarray(test_labels)
 
+"""regularizers.l2 and layers.Dropout are use to prevent overfitting """
 model = models.Sequential()
-model.add(layers.Dense(16, activation='relu', input_shape=(10000,)))
-model.add(layers.Dense(16, activation='relu'))
-model.add(layers.Dense(16, activation='relu'))
+model.add(layers.Dense(16, activation='relu', kernel_regularizer=regularizers.l2(0.001), input_shape=(10000,)))
+model.add(layers.Dropout(0.5))
+model.add(layers.Dense(16, activation='relu',kernel_regularizer=regularizers.l2(0.001)))
+model.add(layers.Dropout(0.5))
+model.add(layers.Dense(16, activation='relu',kernel_regularizer=regularizers.l2(0.001)))
+model.add(layers.Dropout(0.5))
 model.add(layers.Dense(1, activation='sigmoid'))
 
 x_val = x_train[:10000]

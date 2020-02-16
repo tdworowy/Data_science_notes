@@ -1,5 +1,5 @@
 import numpy as np
-from keras import models, layers
+from keras import models, layers, regularizers
 from keras.datasets import reuters
 from keras.utils import to_categorical
 
@@ -38,10 +38,13 @@ y_test = to_one_hot(test_labels)
 # y_train = to_categorical(train_labels)
 # y_test = to_categorical(test_labels)
 
-
+"""regularizers.l2 and layers.Dropout are use to prevent overfitting """
 model = models.Sequential()
-model.add(layers.Dense(64, activation='relu', input_shape=(20000,)))
-model.add(layers.Dense(64, activation='relu'))
+model.add(layers.Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001), input_shape=(20000,)))
+model.add(layers.Dropout(0.3))
+model.add(layers.Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001)))
+model.add(layers.Dropout(0.3))
+model.add(layers.Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001)))
 model.add(layers.Dense(46, activation='softmax'))
 
 x_val = x_train[:1000]
@@ -50,7 +53,7 @@ y_val = y_train[:1000]
 partial_y_train = y_train[1000:]
 
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['acc'])
-history = model.fit(partial_x_train, partial_y_train, epochs=9, batch_size=512, validation_data=(x_val, y_val))
+history = model.fit(partial_x_train, partial_y_train, epochs=15, batch_size=512, validation_data=(x_val, y_val))
 
 acc = history.history['acc']
 val_acc = history.history['val_acc']

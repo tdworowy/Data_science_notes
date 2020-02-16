@@ -1,4 +1,4 @@
-from keras import models, layers
+from keras import models, layers, regularizers
 from keras.datasets import boston_housing
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,8 +16,8 @@ test_data /= std
 
 def build_model():
     model = models.Sequential()
-    model.add(layers.Dense(64, activation='relu', input_shape=(train_data.shape[1],)))
-    model.add(layers.Dense(64, activation='relu'))
+    model.add(layers.Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001), input_shape=(train_data.shape[1],)))
+    model.add(layers.Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001)))
     model.add(layers.Dense(1))
     model.compile(optimizer='rmsprop', loss='mse', metrics=['mae'])
     return model
