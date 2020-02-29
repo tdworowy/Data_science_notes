@@ -1,9 +1,10 @@
+import mpld3
 import numpy as np
 from keras import models, layers, regularizers
 from keras.datasets import reuters
 from keras.utils import to_categorical
 
-from vizualization import plt_loos, plt_accuracy
+from vizualization import plt_loos, plt_accuracy, plt_accuracy_html, plt_loos_html
 
 (train_data, train_labels), (test_data, test_labels) = reuters.load_data(num_words=20000)
 
@@ -61,8 +62,11 @@ loss = history.history['loss']
 val_loss = history.history['val_loss']
 epochs = range(1, len(acc) + 1)
 
-plt_loos(epochs, loss, val_loss).show()
-plt_accuracy(epochs, acc, val_acc).show()
+plt_l = plt_loos_html(epochs, loss, val_loss)
+print(mpld3.fig_to_html(plt_l))
+
+plt_a = plt_accuracy_html(epochs, acc, val_acc)
+print(mpld3.fig_to_html(plt_a))
 
 test_loss, test_acc = model.evaluate(x_test, y_test)
 print(f"test_acc:{test_acc}, test_loss:{test_loss}")
