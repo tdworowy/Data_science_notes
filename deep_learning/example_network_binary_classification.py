@@ -2,7 +2,7 @@ import numpy as np
 from keras import models, layers, regularizers
 from keras.datasets import imdb
 
-from vizualization import plt_loos, plt_accuracy
+from vizualization import plt_loss, plt_accuracy
 
 (train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=10000)
 
@@ -50,7 +50,7 @@ loss = history.history['loss']
 val_loss = history.history['val_loss']
 epochs = range(1, len(acc) + 1)
 
-plt_loos(epochs, loss, val_loss).show()
+plt_loss(epochs, loss, val_loss).show()
 plt_accuracy(epochs, acc, val_acc).show()
 
 test_loss, test_acc = model.evaluate(x_test, test_labels)

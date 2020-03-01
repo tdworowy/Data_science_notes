@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 
-def plt_loos(epochs, loss, val_loss):
+def plt_loss(epochs, loss, val_loss):
     plt.plot(epochs, loss, 'bo', label="Training loss")
     plt.plot(epochs, val_loss, 'b', label="Validation loss")
     plt.title("Training and validation loss")
@@ -21,7 +21,7 @@ def plt_accuracy(epochs, acc, val_acc):
     return plt
 
 
-def plt_loos_html(epochs, loss, val_loss):
+def plt_loss_html(epochs, loss, val_loss):
     fig, _plt = plt.subplots()
     _plt.plot(epochs, loss, 'bo', label="Training loss")
     _plt.plot(epochs, val_loss, 'b', label="Validation loss")
