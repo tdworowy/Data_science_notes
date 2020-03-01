@@ -1,5 +1,4 @@
 import os, shutil
-from keras.datasets import mnist
 from keras import models, layers, optimizers
 from keras_preprocessing.image import ImageDataGenerator
 
@@ -34,13 +33,12 @@ def copy_data(animal, range, dest_dir):
         shutil.copy(scr, dst)
 
 
-# if False:
-#     copy_data('cat', range(1000), train_cats)
-#     copy_data('cat', range(1500, 2000), validation_cats)
-#     copy_data('cat', range(2000, 2500), tests_cats)
-#     copy_data('dog', range(1000), train_dogs)
-#     copy_data('dog', range(1500, 2000), validation_dogs)
-#     copy_data('dog', range(2000, 2500), tests_dogs)
+copy_data('cat', range(2000), train_cats)
+copy_data('cat', range(2500, 3500), validation_cats)
+copy_data('cat', range(3500, 4500), tests_cats)
+copy_data('dog', range(2000), train_dogs)
+copy_data('dog', range(2500, 3500), validation_dogs)
+copy_data('dog', range(3500, 4500), tests_dogs)
 
 
 model = models.Sequential()
@@ -72,26 +70,26 @@ train_datagen = ImageDataGenerator(rescale=1. / 255,
                                    horizontal_flip=True,
                                    fill_mode='nearest')  # with data augmentation
 
-test_datagen = ImageDataGenerator(rescale=1. / 255)
+val_datagen = ImageDataGenerator(rescale=1. / 255)
 
 train_generator = train_datagen.flow_from_directory(
     directory=train_dir,
     target_size=(150, 150),
-    batch_size=20,
+    batch_size=32,
     class_mode='binary'
 )
-validation_generator = train_datagen.flow_from_directory(
+validation_generator = val_datagen.flow_from_directory(
     directory=validation_dir,
     target_size=(150, 150),
-    batch_size=20,
+    batch_size=32,
     class_mode='binary'
 )
 history = model.fit_generator(
     generator=train_generator,
-    steps_per_epoch=100,
-    epochs=30,
+    steps_per_epoch=150,
+    epochs=60,
     validation_data=validation_generator,
-    validation_steps=50
+    validation_steps=100
 )
 
 model.save("cat_and_dogs_small_2.h5")
@@ -100,7 +98,7 @@ acc = history.history['acc']
 val_acc = history.history['val_acc']
 loss = history.history['loss']
 val_loss = history.history['val_loss']
-epochs = range(1, len(acc) + 1)
+epochs = range(len(acc))
 
 plt_loss(epochs, loss, val_loss).show()
 plt_accuracy(epochs, acc, val_acc).show()
