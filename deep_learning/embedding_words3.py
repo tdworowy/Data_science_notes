@@ -25,8 +25,8 @@ for label_type in ['neg', 'pos']:
                 labels.append(0)
             else:
                 labels.append(1)
-maxlen = 300
-training_samples = 400
+maxlen = 100 #300
+training_samples = 299#400
 validation_samples = 10000
 max_words = 10000
 
