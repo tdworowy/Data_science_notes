@@ -7,7 +7,7 @@ from keras.optimizers import RMSprop
 
 from vizualization import plt_loss
 
-data_dir = 'data/jena_climate'
+data_dir = '../data/jena_climate'
 f_name = 'jena_climate_2009_2016.csv'
 
 with open(os.path.join(data_dir, f_name)) as file:
@@ -31,8 +31,8 @@ plt.show()
 plt.plot(range(1440), temp[:1440])
 plt.show()
 
-lookback = 720  # observations from 5 days
-step = 6  # one observation per hour
+lookback = 2160  # observations
+step = 3  # one observation per half of hour
 delay = 144  # predict temperature in next 24 hours
 batch_size = 128
 
@@ -115,17 +115,16 @@ def evaluate_naive_method():
 evaluate_naive_method()
 
 model = Sequential()
-model.add(layers.GRU(32,
-                     input_shape=(None, float_data.shape[-1]),
-                     dropout=0.2,
-                     recurrent_dropout=0.2,
-                     return_sequences=True
-                     ))
-model.add(layers.GRU(64,
-                     activation='relu',
-                     dropout=0.1,
-                     recurrent_dropout=0.2
-                     ))
+model.add(layers.Conv1D(32, 5,
+                        activation='relu',
+                        input_shape=(None, float_data.shape[-1])))
+model.add(layers.MaxPooling1D(3))
+model.add(layers.Conv1D(32, 5,
+                        activation='relu'))
+
+model.add(layers.LSTM(32,
+                      dropout=0.1,
+                      recurrent_dropout=0.5))
 model.add(layers.Dense(1))
 
 model.compile(optimizer=RMSprop(), loss='mae')
@@ -136,7 +135,6 @@ history = model.fit_generator(
     validation_data=val_gen,
     validation_steps=val_steps
 )
-
 
 loss = history.history['loss']
 val_loss = history.history['val_loss']

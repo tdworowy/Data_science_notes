@@ -11,7 +11,7 @@ import numpy as np
 
 from vizualization import plt_loss, plt_accuracy
 
-imdb_dir = 'data/aclImdb'
+imdb_dir = '../data/aclImdb'
 train_dir = os.path.join(imdb_dir, 'train')
 labels = []
 texts = []
@@ -51,7 +51,7 @@ y_train = labels[:training_samples]
 x_val = data[training_samples:validation_samples]
 y_val = labels[training_samples:validation_samples]
 
-glove_dir = 'data/glove'
+glove_dir = '../data/glove'
 embeddings_index = {}
 embedding_dim = 100
 
