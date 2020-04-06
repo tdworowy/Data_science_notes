@@ -23,5 +23,6 @@ gender_prediction = layers.Dense(1, activation='sigmoid', name='gender')(x)
 
 model = Model(post_inputs, [age_prediction, income_prediction, gender_prediction])
 
-model.compile(optimizer='rmsprop', loss=['msq', 'categorical_crossentropy', 'binary_crossentropy'])
-
+model.compile(optimizer='rmsprop',
+              loss=['mse', 'categorical_crossentropy', 'binary_crossentropy'],
+              loss_weights=[-0.25, 1., 10.]) # weights need to be balanced
