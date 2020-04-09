@@ -2,7 +2,6 @@ from keras.datasets import mnist
 from keras import models, layers
 from keras.utils import to_categorical
 import keras
-import matplotlib.pyplot as plt
 
 """recognition of handwritten numbers"""
 
@@ -33,7 +32,6 @@ test_labels = to_categorical(test_labels)
 
 network.fit(train_images, train_label, epochs=5, batch_size=128, callbacks=callbacks)
 
-network.save("network1.h5", overwrite=True)
 print("******Start Test******")
 test_loss, test_acc = network.evaluate(test_images, test_labels)
 print(f"test_acc:{test_acc}, test_loss:{test_loss}")
