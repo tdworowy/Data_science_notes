@@ -8,13 +8,20 @@ from pandas import np
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-(x_train, y_train), (_, _) = keras.datasets.cifar10.load_data() # ssl.SSLError: [SSL: DECRYPTION_FAILED_OR_BAD_RECORD_MAC] decryption failed or bad record mac (_ssl.c:2555)
+(x_train, y_train), (_,
+                     _) = keras.datasets.cifar10.load_data()  # ssl.SSLError: [SSL: DECRYPTION_FAILED_OR_BAD_RECORD_MAC] decryption failed or bad record mac (_ssl.c:2555)
 x_train = x_train[y_train.flatten() == 6]  # frog pictures (class 6)
+
 
 latent_dim = 32
 height = 32
 width = 32
 channels = 3
+
+x_train = x_train.reshape(
+    (x_train.shape[0],) + (height, width,
+                           channels)).astype('float32') / 255
+
 generator_input = keras.Input(shape=(latent_dim,))
 
 x = layers.Dense(128 * 16 * 16)(generator_input)
@@ -59,19 +66,13 @@ gan = keras.models.Model(gan_input, gan_output)
 gan_optimizer = keras.optimizers.RMSprop(lr=0.0004, clipvalue=1.0, decay=1e-8)
 gan.compile(optimizer=gan_optimizer, loss='binary_crossentropy')
 
-
-
-x_train = x_train.reschape(
-    (x_train.shape[0],) + (height, width,
-                           channels)).astype('float32') / 255
-
 iterations = 10000
 batch_size = 20
 save_dir = 'output'
 start = 0
 
 for step in range(iterations):
-    random_latent_vectors = np.random.normal(size=(batch_size,latent_dim))
+    random_latent_vectors = np.random.normal(size=(batch_size, latent_dim))
     generated_images = generator.predict(random_latent_vectors)
 
     stop = start + batch_size
