@@ -1,11 +1,6 @@
 import gym
 import numpy as np
 
-env = gym.make("FrozenLake-v0")
-
-print(f"State count: {env.observation_space.n}")
-print(f"Actions count: {env.action_space.n}")
-
 
 # Dynamic programing, markov decision process and  Bellman equation
 
@@ -87,6 +82,11 @@ def policy_iteration(env, gamma: float = 1.0):
 
 
 if __name__ == "__main__":
+    env = gym.make("FrozenLake-v0")
+
+    print(f"State count: {env.observation_space.n}")
+    print(f"Actions count: {env.action_space.n}")
+
     optimal_value_function = value_iterations(env)
     optimal_policy = extract_policy(env, optimal_value_function)
 
