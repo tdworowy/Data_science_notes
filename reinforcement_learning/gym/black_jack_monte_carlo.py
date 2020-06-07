@@ -31,6 +31,7 @@ def generate_episode(policy, env):
 def first_visit_mc_prediction(policy, env, n_episodes):
     value_table = defaultdict(float)
     n = defaultdict(int)
+
     for _ in range(n_episodes):
         states, _, rewards = generate_episode(policy, env)
         returns = 0
@@ -41,6 +42,7 @@ def first_visit_mc_prediction(policy, env, n_episodes):
             if s not in states[:t]:
                 n[s] += 1
                 value_table[s] += (returns - value_table[s]) / n[s]
+
     return value_table
 
 
@@ -58,6 +60,7 @@ def plot_blackjack(v, ax1, ax2):
     x, y = np.meshgrid(player_sum, dealer_show)
     ax1.plot_wireframe(x, y, state_values[:, :, 0])
     ax2.plot_wireframe(x, y, state_values[:, :, 1])
+
     for ax in ax1, ax2:
         ax.set_zlim(-1, 1)
         ax.set_ylabel('player sum')
