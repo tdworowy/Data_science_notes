@@ -3,8 +3,6 @@ import gym
 import numpy as np
 from matplotlib import pyplot as plt
 
-plt.style.use("ggplot")
-
 
 def sample_policy(observation) -> int:
     score, dealer_score, usable_ace = observation
@@ -70,6 +68,7 @@ def plot_blackjack(v, ax1, ax2):
 
 if __name__ == "__main__":
     env = gym.make("Blackjack-v0")
+    plt.style.use("ggplot")
 
     fix, axes = plt.subplots(nrows=2, figsize=(5, 8), subplot_kw={'projection': '3d'})
     axes[0].set_title("value function without usable ace")
