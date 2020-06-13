@@ -14,7 +14,6 @@ def update_q_table(env, q: dict, prev_state, action, reward: int, next_state, al
     q = q.copy()
     qa = max([q[next_state, _action] for _action in range(env.action_space.n)])
     q[(prev_state, action)] += alpha * (reward + gamma * qa - q[prev_state, action])
-
     return q
 
 
@@ -33,12 +32,13 @@ if __name__ == "__main__":
     epsilon = 0.017
 
     q = get_q(env)
+    rewards = []
     for i in range(8000):
         total_reward = 0
         prev_state = env.reset()
 
         while True:
-            env.render()
+            #env.render()
             action = epsilon_greedy_policy(env, q, prev_state, epsilon)
             next_state, reward, done, _ = env.step(action)
 
@@ -55,5 +55,7 @@ if __name__ == "__main__":
             total_reward += reward
             if done:
                 break
+        rewards.append(total_reward)
         print(f"Total reward: {total_reward}")
+    print(f"Best reward: {max(rewards)}")
     env.close()
