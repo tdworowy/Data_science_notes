@@ -5,3 +5,4 @@ data
 *.npz
 logs
 output
+gym-bandits
