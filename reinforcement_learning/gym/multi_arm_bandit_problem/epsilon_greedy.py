@@ -21,7 +21,9 @@ if __name__ == "__main__":
 
     for i in range(num_rounds):
         arm = epsilon_greedy_policy(env, q, 0.5)
+
         observation, reward, done, info = env.step(arm)
+
         count[arm] += 1
         sum_rewards[arm] += reward
 
