@@ -10,8 +10,7 @@ from sklearn import datasets
 from sklearn.feature_selection import SelectKBest, f_regression
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
-from sklearn.ensemble import  RandomForestRegressor
-
+from sklearn.ensemble import RandomForestRegressor
 
 # In[2]:
 
@@ -21,7 +20,6 @@ X_full = dataset.data
 Y = dataset.target
 print(X_full.shape)
 print(Y.shape)
-
 
 # In[3]:
 
@@ -47,37 +45,28 @@ def plot_scatter(X, Y, R=None):
 
 plot_scatter(X, Y)
 
-
 # In[6]:
 
 
-regresor = LinearRegression(normalize = True).fit(X, Y)
+regresor = LinearRegression(normalize=True).fit(X, Y)
 plot_scatter(X, Y, regresor.predict(X))
-
 
 # In[7]:
 
 
-regresor = SVR(gamma ='auto').fit(X,Y)
+regresor = SVR(gamma='auto').fit(X, Y)
 plot_scatter(X, Y, regresor.predict(X))
-
 
 # In[8]:
 
 
-regresor = SVR(gamma ='scale').fit(X,Y)
+regresor = SVR(gamma='scale').fit(X, Y)
 plot_scatter(X, Y, regresor.predict(X))
-
 
 # In[9]:
 
 
-regresor = RandomForestRegressor(n_estimators =100).fit(X,Y)
+regresor = RandomForestRegressor(n_estimators=100).fit(X, Y)
 plot_scatter(X, Y, regresor.predict(X))
 
-
 # In[ ]:
-
-
-
-

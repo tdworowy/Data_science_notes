@@ -32,7 +32,7 @@ soup.title
 def get_links(soup):
     try:
         section = soup.find_all(id='mw-normal-catlinks')[0]
-    except(IndexError):
+    except IndexError:
         return []
         
     links = []
