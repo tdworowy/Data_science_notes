@@ -6,8 +6,8 @@ import numpy as np
 
 from upper_confidence_bound import upper_confidence_bound
 from epsilon_greedy import epsilon_greedy_policy
-
 from softmax import softmax
+from thompson_sampling_algorithm import thompson_sampling
 
 
 def run(algorithm, algorithm_name, env, algorithm_args_names, algorithm_args_outer):
@@ -15,11 +15,15 @@ def run(algorithm, algorithm_name, env, algorithm_args_names, algorithm_args_out
     count = np.zeros(10)
     sum_rewards = np.zeros(10)
     q = np.zeros(10)
+    reward = 0
+    arm = 0
 
     alg_args_dict = {
         "count": count,
         "q": q,
-        "env": env
+        "env": env,
+        "reward": reward,
+        "arm": arm
     }
 
     alg_args_dict.update(algorithm_args_outer)
@@ -51,3 +55,6 @@ if __name__ == "__main__":
 
     run(algorithm=softmax, algorithm_name="softmax", env=env,
         algorithm_args_names=["tau", "q"], algorithm_args_outer={"tau": 0.5})
+
+    run(algorithm=thompson_sampling, algorithm_name="thompson sampling", env=env,
+        algorithm_args_names=["reward", "arm"], algorithm_args_outer={})

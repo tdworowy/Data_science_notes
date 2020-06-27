@@ -3,29 +3,31 @@ import gym
 import gym_bandits
 import numpy as np
 
+alpha = np.ones(10)
+beta = np.ones(10)
 
-def upper_confidence_bound(iters, count:  np.ndarray, q:  np.ndarray) -> np.ndarray:
-    ucb = np.zeros(10)
-    if iters < 10:
-        return iters
+
+def thompson_sampling(reward: int, arm: int) -> np.ndarray:
+    samples = [np.random.beta(alpha[i] + 1, beta[i] + 1) for i in range(10)]
+    if reward > 0:
+        alpha[arm] += 1
     else:
-        for arm in range(10):
-            upper_bound = math.sqrt((2 ** math.log(sum(count))) / count[arm])
-            ucb[arm] = q[arm] + upper_bound
-
-    return np.argmax(ucb)
+        beta[arm] += 1
+    return np.argmax(samples)
 
 
 if __name__ == "__main__":
     env = gym.make('BanditTenArmedGaussian-v0')
-
     num_rounds = 20000
     count = np.zeros(10)
     sum_rewards = np.zeros(10)
     q = np.zeros(10)
 
+    reward = 0
+    arm = 0
+
     for i in range(num_rounds):
-        arm = upper_confidence_bound(iters=i, count=count, q=q)
+        arm = thompson_sampling(reward, arm)
         observation, reward, done, info = env.step(arm)
 
         count[arm] += 1

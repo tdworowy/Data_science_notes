@@ -5,7 +5,7 @@ import gym_bandits
 import numpy as np
 
 
-def epsilon_greedy_policy(env, q: np.ndarray, epsilon: float):
+def epsilon_greedy_policy(env, q: np.ndarray, epsilon: float) -> np.ndarray:
     if random.uniform(0, 1) < epsilon:
         return env.action_space.sample()
     else:
@@ -27,5 +27,5 @@ if __name__ == "__main__":
         count[arm] += 1
         sum_rewards[arm] += reward
 
-        q[arm] = sum_rewards[arm]/count[arm]
+        q[arm] = sum_rewards[arm] / count[arm]
     print(f"Optimal arm:{np.argmax(q)}")

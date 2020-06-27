@@ -1,11 +1,13 @@
 import random
 import math
+from typing import Union
+
 import gym
 import gym_bandits
 import numpy as np
 
 
-def softmax(tau: float, q:  np.ndarray):
+def softmax(tau: float, q:  np.ndarray) -> Union[int, np.ndarray]:
     total = sum([math.exp(val / tau) for val in q])
     probs = [math.exp(val / tau) / total for val in q]
     threshold = random.random()
