@@ -1,0 +1,1 @@
+table1 <- data.frame(column1 = c(1:3), column2 = c("a","b","c"))
