@@ -5,7 +5,7 @@ import random
 from datetime import datetime
 from keras import models, layers
 
-
+# alternatives, dueling q networks, recurrent q networks
 # TODO use Keras
 def pre_process_observation(obs):
     color = np.array([210, 164, 74]).mean()
