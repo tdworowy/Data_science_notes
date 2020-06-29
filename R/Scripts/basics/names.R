@@ -8,6 +8,3 @@ m <- matrix(1:4, nrow = 2, ncol = 2)
 dimnames(m) <- list(c("A","B"), c("C","D"))
 print(m)
 
-
-dput(m,file="test.R") # will generate file with R code with can generate object m 
-dput(dput) # will display function codedput()
