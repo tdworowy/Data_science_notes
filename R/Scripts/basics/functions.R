@@ -6,3 +6,17 @@ column_mean  <- function(m, removeNA = TRUE) {
   }
   means #last expression is returned
 }
+
+# Custom operatpr
+"%p%" <- function(x,y){ 
+  paste(x,y)
+  
+}
+# using ...
+test <- function(...){
+  args <- list(...)
+  x1 <- args[1]
+  x2 <- args[2]
+  x3 <- args[3]
+  paste(x1,x2,x3)
+}

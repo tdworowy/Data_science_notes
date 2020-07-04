@@ -11,5 +11,9 @@ my_seq2 <- seq(5,10, length.out = 30)
 
 seq_along(my_seq)
 
+
+inst <- sample(12)
+which(ints > 4)
+
 library("swirl")
 swirl() # courses
