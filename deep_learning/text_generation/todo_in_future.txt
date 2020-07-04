@@ -1,2 +1,0 @@
-https://medium.com/coinmonks/word-level-lstm-text-generator-creating-automatic-song-lyrics-with-neural-networks-b8a1617104fb
-https://github.com/enriqueav/lstm_lyrics/blob/master/generate.py
