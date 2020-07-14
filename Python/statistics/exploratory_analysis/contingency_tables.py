@@ -4,7 +4,7 @@ if __name__ == "__main__":
 
     """summarize the relationship between several categorical variables"""
 
-    file = "../data/statistics/lc_loans.csv"
+    file = "../../data/statistics/lc_loans.csv"
     data = pd.read_csv(file)
 
     cross_tab = data.pivot_table(index="grade",

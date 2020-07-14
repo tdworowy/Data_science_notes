@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 if __name__ == "__main__":
-    file = "../data/statistics/kc_tax.csv"
+    file = "../../data/statistics/kc_tax.csv"
     data = pd.read_csv(file)
     kc_tax = data.loc[(data.TaxAssessedValue < 750000) &
                       (data.SqFtTotLiving < 3500) &

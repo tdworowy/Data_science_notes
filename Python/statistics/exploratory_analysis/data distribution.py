@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    file = "../data/statistics/hw1_data.csv"
+    file = "../../data/statistics/hw1_data.csv"
     data = pd.read_csv(file)
     percentiles = data["Temp"].quantile([0.05, 0.25, 0.5, 0.75, 0.95])
 

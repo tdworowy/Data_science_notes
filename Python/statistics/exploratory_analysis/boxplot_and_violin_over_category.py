@@ -4,7 +4,7 @@ import seaborn as sns
 
 if __name__ == "__main__":
     # box plot
-    file = "../data/statistics/airline_stats.csv"
+    file = "../../data/statistics/airline_stats.csv"
     airline_stats = pd.read_csv(file)
 
     ax = airline_stats.boxplot(by="airline", column="pct_carrier_delay")
