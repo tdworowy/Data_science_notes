@@ -6,7 +6,7 @@ sample_data <- data.frame(income=sample(data,1000),type='data_dist')
 
 #sample of means 5 values
 sample_mean_05 <- data.frame(
-  income=tapply(
+  income = tapply(
     sample(data,1000*5),
     rep(1:1000, rep(5,1000)),
     FUN=mean),
@@ -14,7 +14,7 @@ sample_mean_05 <- data.frame(
   )
 #sample of means 20 values
 sample_mean_20 <- data.frame(
-  income=tapply(
+  income = tapply(
     sample(data,1000*20),
     rep(1:1000, rep(20,1000)),
     FUN=mean),
