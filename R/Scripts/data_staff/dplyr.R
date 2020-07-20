@@ -28,3 +28,5 @@ data %>% mutate(tempcat = factor(1 *(tmpd > 80), labels = c("cold","hot"))) %>%
   summarize(pm25=mean(pm25, na.rm = TRUE), o3 = max(o3tmean2), no2 = median(no2tmean2))
 
 data_tbl_df <- tbl_df(data) # create dplyr specific data type
+
+View(data_tbl_df) # view all data
