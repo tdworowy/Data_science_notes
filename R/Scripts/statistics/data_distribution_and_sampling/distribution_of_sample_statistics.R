@@ -31,3 +31,14 @@ income$type = factor(
 ggplot(income, aes(x=income))+
   geom_histogram(bins=40)+
   facet_grid(type ~ .)
+
+
+#qq-plot -how close sample is to a specific distribution
+
+norm_sample <- rnorm(200)
+qqnorm(norm_sample)
+abline(a=0,b=1, col='blue')
+ 
+pois_sample <- rpois(1:100, lambda = 1)#?
+qqnorm(pois_sample)
+abline(a=0,b=1, col='blue')
