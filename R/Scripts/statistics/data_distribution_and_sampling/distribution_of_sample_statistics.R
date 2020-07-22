@@ -33,7 +33,7 @@ ggplot(income, aes(x=income))+
   facet_grid(type ~ .)
 
 
-#qq-plot -how close sample is to a specific distribution
+#qq-plot - how close sample is to a specific distribution
 
 norm_sample <- rnorm(200)
 qqnorm(norm_sample)
@@ -42,3 +42,15 @@ abline(a=0,b=1, col='blue')
 pois_sample <- rpois(1:100, lambda = 1)#?
 qqnorm(pois_sample)
 abline(a=0,b=1, col='blue')
+
+#long tail 
+data <- read.csv("Data/sp500_data.csv")
+data <- data[,"NFLX"]
+nflx <- diff(log(data[data>0]))
+qqnorm(nflx)
+abline(a=0,b=1, col='blue')
+
+hist(data[data>0])
+
+#binomial
+dbinom(x=10,size=10,p=0.5) #probability of observing "x" successes in "size" trails where probability of success is "p"
