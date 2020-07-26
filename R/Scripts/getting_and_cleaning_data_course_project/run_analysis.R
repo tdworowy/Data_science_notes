@@ -1,6 +1,7 @@
 
 setwd("Scripts/getting_and_cleaning_data_course_project")
-
+url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+download.file(url, "Dataset.zip")
 ################################################################################
 # Loads required libraries
 ################################################################################
@@ -61,3 +62,4 @@ new_features <- names(new_data_set)[3:length(names(new_data_set))]
 new_features <- paste("Mean_Of", new_features, sep="_")
 names(new_data_set) <- c("Subject","Activity", new_features)
 write.csv(new_data_set,"tidy.csv")
+write.table(new_data_set,"tidy.txt",row.name=FALSE) 
