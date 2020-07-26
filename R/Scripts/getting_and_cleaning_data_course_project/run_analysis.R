@@ -52,9 +52,12 @@ names(data_set) <- c("Subject","Activity",features)
 #Extracts only the measurements on the mean and standard deviation for each measurement.
 ################################################################################
 filtered_data_set <- data_set %>% select(contains("Subject")|contains("Activity")|contains("Mean")|contains("std"))
-
+filtered_data_set <- filtered_data_set %>% select(!contains("angle"))
 ################################################################################
 #creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 ################################################################################
 new_data_set <- filtered_data_set %>% group_by(Subject,Activity) %>% summarise_all(list(mean))
+new_features <- names(new_data_set)[3:length(names(new_data_set))]
+new_features <- paste("Mean_Of", new_features, sep="_")
+names(new_data_set) <- c("Subject","Activity", new_features)
 write.csv(new_data_set,"tidy.csv")
