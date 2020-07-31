@@ -1,4 +1,5 @@
 example("points")
+
 # Base plot 1
 library(datasets)
 data(cars)
