@@ -30,4 +30,18 @@ mean(perm_diffs > (mean_b - mean_a))
 
 #observed differences in session time between page A and B is well within the range of chance variation
 #thus in not statistically significant 
- 
+
+#histogram of random;y permuted differences in conversion
+
+obs_pct_diff <- 100 * (200 / 23739 - 182 / 22588)
+conversion <- c(rep(0, 45945), rep(1, 382))
+perm_diffs <- rep(0, 1000)
+for (i in 1:1000) {
+  perm_diffs[i] = 100 * permutation_func(conversion, 23739, 22588)
+}
+hist(perm_diffs)
+abline(v=obs_pct_diff,lty=2, lwd=3,col="red")
+
+#p-value
+mean(perm_diffs > obs_pct_diff) # from permutation test
+prop.test(x=c(200,182), n=c(23739,22588), alternative='greater') #p-value approximation (can use for binomial distribution)
