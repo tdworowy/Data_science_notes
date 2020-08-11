@@ -45,3 +45,7 @@ abline(v=obs_pct_diff,lty=2, lwd=3,col="red")
 #p-value
 mean(perm_diffs > obs_pct_diff) # from permutation test
 prop.test(x=c(200,182), n=c(23739,22588), alternative='greater') #p-value approximation (can use for binomial distribution)
+
+#t-Test
+t.test(Time ~ Page, data = data)
+t.test(Time ~ Page, data = data, alternative ='less')
