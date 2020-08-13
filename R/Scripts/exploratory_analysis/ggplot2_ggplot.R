@@ -54,3 +54,10 @@ ggplot(maacs, aes(logpm25, NocturnalSympt)) +
   labs(y = "Nocturnal Symptoms")
  
 
+#plot 7
+ggplot(mpg, aes(x=displ, y=hwy, color=factor(year))) + 
+  geom_point() + 
+  facet_grid(drv~cyl, margins=TRUE) + 
+  geom_smooth(method ="lm", se=FALSE, size=1, color="black") + 
+  labs(x="Displacement",y="Highway Mileage")
+
