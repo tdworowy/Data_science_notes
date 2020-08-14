@@ -32,3 +32,11 @@ xyplot(y ~ x | f, panel = function(x, y, ...){
   panel.abline(h=mean(y),lty=2, col="green")
   panel.lmline(x,y, col="red")
 }) 
+
+# plot 4
+library(nlme)
+xyplot(weight ~ Time | Diet, BodyWeight)
+
+# plot 5
+data(airquality)
+p <- xyplot(Ozone ~ Wind | factor(Month), data = airquality)

@@ -45,3 +45,14 @@ qplot(displ, hwy, data = mpg,
       facets = . ~ drv, 
       color = drv) +
   geom_smooth(method = "lm")
+
+
+#plot 10
+library(datasets)
+data(airquality)
+
+qplot(Wind, Ozone, data = airquality, facets = . ~ factor(Month))
+
+
+airquality = transform(airquality, Month = factor(Month))
+qplot(Wind, Ozone, data = airquality, facets = . ~ Month)
