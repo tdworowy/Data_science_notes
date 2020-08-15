@@ -3,7 +3,6 @@ from random import sample
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 
 def permutation(x: pd, nA: int, nB: int):
