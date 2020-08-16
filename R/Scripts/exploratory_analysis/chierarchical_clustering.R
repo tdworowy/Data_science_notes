@@ -30,8 +30,8 @@ clusplot(df, fit$cluster, color=TRUE, shade=TRUE,
 clusplot(df, fit$cluster, color=TRUE, shade=TRUE)
 
 
-ggplot(df, aes(x = x, y = y, color = fit$cluster)) + 
-  geom_point()+
-  stat_ellipse() # don't work
+ggplot(df, aes(x = x, y = y, color = fit$cluster)) +  # clusters as colors
+  geom_point()
+
   
   
