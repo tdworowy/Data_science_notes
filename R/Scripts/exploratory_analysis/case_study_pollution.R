@@ -88,6 +88,8 @@ abline(h = median(x1_sub_0, na.rm = TRUE))
 plot(dates_1, x1_sub_1, pch=19, ylim=rng)
 abline(h = median(x1_sub_1, na.rm = TRUE))
 
+
+#plot state means
 # plot by state
 mean_0 <- with(pm_0, tapply(Sample.Value, State.Code, mean, na.rm=TRUE))
 mean_1 <- with(pm_1, tapply(Sample.Value, State.Code, mean, na.rm=TRUE))
@@ -96,9 +98,22 @@ d_0 <- data.frame(state = names(mean_0), mean = mean_0)
 d_1 <- data.frame(state = names(mean_1), mean = mean_1)
 
 mrg <- merge(d_0,d_1, by = "state")
-
-#plot state means
 par(mfrow = c (1,1))
 with(mrg, plot(rep(1999, 52), mrg[,2], xlim = c(1998,2013),pch=19))
+with(mrg, points(rep(2012, 52), mrg[,3],pch=19))
+with(mrg, segments(rep(1999,52),mrg[,2], rep(2012,52), mrg[,3]))
+
+#plot state max
+max_0 <- with(pm_0, tapply(Sample.Value, State.Code, max, na.rm=TRUE))
+max_1 <- with(pm_1, tapply(Sample.Value, State.Code, max, na.rm=TRUE))
+
+d_0 <- data.frame(state = names(mean_0), max = max_0)
+d_1 <- data.frame(state = names(mean_1), max = max_1)
+
+mrg <- merge(d_0,d_1, by = "state")
+rng <- range(max_0, max_1, na.rm = TRUE)
+
+par(mfrow = c (1,1))
+with(mrg, plot(rep(1999, 52), mrg[,2], xlim = c(1998,2013), ylim=rng,pch=19))
 with(mrg, points(rep(2012, 52), mrg[,3],pch=19))
 with(mrg, segments(rep(1999,52),mrg[,2], rep(2012,52), mrg[,3]))
