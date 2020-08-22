@@ -22,3 +22,5 @@ house_regresion
 house_regresion2 <- lm(AdjSalePrice ~ SqFtTotLiving + SqFtLot + Bathrooms + 
                         Bedrooms + BldgGrade + ZipGroup,
                       data=house, na.action=na.omit)
+
+house_regresion2
