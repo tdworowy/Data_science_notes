@@ -24,3 +24,8 @@ house_regresion2 <- lm(AdjSalePrice ~ SqFtTotLiving + SqFtLot + Bathrooms +
                       data=house, na.action=na.omit)
 
 house_regresion2
+
+house_regresion3 <- lm(AdjSalePrice ~ SqFtTotLiving * ZipGroup + SqFtLot + Bathrooms + 
+                         Bedrooms + BldgGrade + PropertyType,
+                       data=house, na.action=na.omit) # * include interaction between variables SqFtTotLiving and ZipGroup
+house_regresion3
