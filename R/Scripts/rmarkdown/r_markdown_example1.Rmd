@@ -1,0 +1,33 @@
+---
+title: "Title"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### R Markdown example.
+
+Load data:
+
+```{r}
+library(datasets)
+data(airquality)
+summary(airquality)
+```
+Pair plot:
+
+```{r}
+pairs(airquality)
+```
+
+Regression model
+
+```{r}
+library(stats)
+fit <- lm(Ozone ~ Wind + Solar.R + Temp, data = airquality)
+summary(fit)
+```
