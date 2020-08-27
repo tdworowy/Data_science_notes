@@ -16,5 +16,5 @@ df <- data.frame(SqFtTotLiving = house_98105[,'SqFtTotLiving'],
 ggplot(df,aes(SqFtTotLiving, PartialResid)) +
   geom_point() +
   scale_shape(solid = FALSE) + 
-  geom_smooth(linetype = 2) +  # relation between SqFtTotLiving and price
+  geom_smooth(linetype = 2) +  # relation between SqFtTotLiving and price (with consideration of other variables) - partial residual
   geom_line(aes(SqFtTotLiving, Terms), col="red") # regression line
