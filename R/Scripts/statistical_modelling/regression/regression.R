@@ -11,6 +11,7 @@ house_lm
 summary(house_lm)
 
 str(house_lm)
+plot(house_lm)
 
 install.packages("ggiraphExtra")
 library(ggiraphExtra)

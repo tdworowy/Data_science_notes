@@ -29,3 +29,5 @@ house_regresion3 <- lm(AdjSalePrice ~ SqFtTotLiving * ZipGroup + SqFtLot + Bathr
                          Bedrooms + BldgGrade + PropertyType,
                        data=house, na.action=na.omit) # * include interaction between variables SqFtTotLiving and ZipGroup
 house_regresion3
+
+plot(house_regresion3)
