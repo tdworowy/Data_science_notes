@@ -1,0 +1,76 @@
+---
+title: " U.S. National Oceanic and Atmospheric Administration's (NOAA) data analize"
+output: pdf_document
+---
+
+
+## Synopsis
+
+TODO synopsis  
+
+## Data Processing
+Load necessary libraries.
+```{r load libraries, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(cowplot)
+
+```
+Download and read csv file.
+```{r setup, cache = TRUE}
+url = "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+file = "Data/FStormData.csv.bz2"
+if(!file.exists(file)){
+  download.file(url,destfile = file)
+}
+data <- read.csv(file)
+```
+Create data set "fatalities", which is a subset of original data with events with number of fatalities greater than 99% of data.
+```{r,fatalites_subset}
+fatalites <- subset(data, FATALITIES>0)
+q_fatalites <-quantile(fatalites$FATALITIES, probs=c(.25,.50,0.95,0.99))
+fatalites_99 <- subset(fatalites, FATALITIES>q_fatalites[4])
+```
+Create data set "injuries", which is a subset of original data with events with number of injuries greater than 99% of data.
+```{r,injuriess_subset}
+injuries <- subset(data, INJURIES>0)
+q_injuries <-quantile(injuries$INJURIES, probs=c(.25,.50,0.95,0.99))
+injuries_99 <- subset(injuries, INJURIES>q_injuries[4])
+```
+
+##Results
+
+### Witch events are most harmful.
+
+```{r harmfuless}
+
+f <- ggplot(fatalites_99, aes(x=log(FATALITIES),y=EVTYPE)) + 
+      geom_bar(fill="red",stat="identity" ) + 
+      ggtitle("Fatalities per event type") + 
+      xlab("log(Fatalities)") +
+      ylab("Event type") +
+      theme_dark()
+
+i <- ggplot(injuries_99, aes(x=log(INJURIES),y=EVTYPE)) + 
+      geom_bar(fill="red",stat="identity" ) + 
+      ggtitle("Injuries per event type") + 
+      xlab("log(Injuries)") +
+      ylab("Event type") +
+      theme_dark()
+
+plot_grid(f,i,nrow = 2, ncol = 1)
+```
+Fatalities
+```{r}
+print(quantile(fatalites$FATALITIES))
+```
+Injuries
+```{r}
+print(quantile(injuries$INJURIES))
+```
+As we can see vast majority of fatalities and injures is caused by less than 1% of events.The most harmful ones are: tornadoes, floods, excessive and extreme heat and head in general. One interesting thing worth noting is that floods cause lots of the injures but almost non of the fatalities.  
+
+### Witch events have the greatest economic consequences.
+TODO
+
+
+
