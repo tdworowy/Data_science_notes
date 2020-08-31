@@ -1,8 +1,13 @@
 ---
-title: " U.S. National Oceanic and Atmospheric Administration's (NOAA) data analize"
-output: pdf_document
+title: 'U.S. National Oceanic and Atmospheric Administration''s (NOAA) data analize'
+output:
+  html_document:
+    df_print: paged
 ---
+## summary
 
+Course Project 2 for coursera reproducible research course. Goal of analysis is to find which types of events are most harmful with respect to population health and which have the greatest economic consequences.
+Data come from  U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database which tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage. The events in the database start in the year 1950 and end in November 2011. 
 
 ## Synopsis
 
@@ -24,20 +29,32 @@ if(!file.exists(file)){
 }
 data <- read.csv(file)
 ```
-Create data set "fatalities", which is a subset of original data with events with number of fatalities greater than 99% of data.
+Create data set "fatalities_99", which is a subset of original data with events with number of fatalities greater than 99% of data.
 ```{r,fatalites_subset}
 fatalites <- subset(data, FATALITIES>0)
 q_fatalites <-quantile(fatalites$FATALITIES, probs=c(.25,.50,0.95,0.99))
-fatalites_99 <- subset(fatalites, FATALITIES>q_fatalites[4])
+fatalites_99 <- subset(fatalites, FATALITIES > q_fatalites[4])
 ```
-Create data set "injuries", which is a subset of original data with events with number of injuries greater than 99% of data.
+Create data set "injuries_99", which is a subset of original data with events with number of injuries greater than 99% of data.
 ```{r,injuriess_subset}
 injuries <- subset(data, INJURIES>0)
 q_injuries <-quantile(injuries$INJURIES, probs=c(.25,.50,0.95,0.99))
-injuries_99 <- subset(injuries, INJURIES>q_injuries[4])
+injuries_99 <- subset(injuries, INJURIES > q_injuries[4])
+```
+Create data set "property_damage_99", which is a subset of original data with events with number of property greater than 99% of data.
+```{r,property_damage_subset}
+property_damage <- subset(data, PROPDMG>0)
+q_property_damage <-quantile(property_damage$PROPDMG, probs=c(.25,.50,0.95,0.9998))
+property_damage_99 <- subset(property_damage, PROPDMG > q_property_damage[4])
+```
+Create data set "crop_damage_99", which is a subset of original data with events with number of crop damages greater than 99% of data.
+```{r,crop_damage_subset}
+crop_damage <- subset(data, CROPDMG>0)
+q_crop_damage <-quantile(crop_damage$CROPDMG, probs=c(.25,.50,0.95,0.998))
+crop_damage_99 <- subset(crop_damage, CROPDMG > q_crop_damage[4])
 ```
 
-##Results
+## Results
 
 ### Witch events are most harmful.
 
@@ -59,18 +76,43 @@ i <- ggplot(injuries_99, aes(x=log(INJURIES),y=EVTYPE)) +
 
 plot_grid(f,i,nrow = 2, ncol = 1)
 ```
-Fatalities
+Fatalities:
 ```{r}
-print(quantile(fatalites$FATALITIES))
+print(quantile(data$FATALITIES))
 ```
-Injuries
+Injuries:
 ```{r}
-print(quantile(injuries$INJURIES))
+print(quantile(data$INJURIES))
 ```
 As we can see vast majority of fatalities and injures is caused by less than 1% of events.The most harmful ones are: tornadoes, floods, excessive and extreme heat and head in general. One interesting thing worth noting is that floods cause lots of the injures but almost non of the fatalities.  
 
 ### Witch events have the greatest economic consequences.
-TODO
+```{r economic_consequences }
 
+f <- ggplot(property_damage_99, aes(x=log(PROPDMG),y=EVTYPE)) + 
+      geom_bar(fill="red",stat="identity" ) + 
+      ggtitle("Property denage per event type") + 
+      xlab("log(Property demege)") +
+      ylab("Event type") +
+      theme_dark()
 
+i <- ggplot(crop_damage_99, aes(x=log(CROPDMG),y=EVTYPE)) + 
+      geom_bar(fill="red",stat="identity" ) + 
+      ggtitle("Crop demmage per event type") + 
+      xlab("log(Crop demage)") +
+      ylab("Event type") +
+      theme_dark()
 
+plot_grid(f,i,nrow = 2, ncol = 1)
+```
+
+Property damage:
+```{r}
+print(quantile(data$PROPDMG))
+```
+Crop damage:
+```{r}
+print(quantile(data$CROPDMG))
+```
+
+As we can see vast majority of economic consequences is caused by less than 1% of events.The most harmful ones are: floods, tornadoes and event associated with wind. In case of crop damage another imported factor is heavy snow. 
