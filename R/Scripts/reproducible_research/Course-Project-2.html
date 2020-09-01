@@ -1640,7 +1640,7 @@ summary {
 <div id="synopsis" class="section level2">
 <h2>Synopsis</h2>
 <div id="summary" class="section level3">
-<h3>summary</h3>
+<h3>Summary</h3>
 <p>Course Project 2 for coursera reproducible research course. Goal of analysis is to find which types of events are most harmful with respect to population health and which have the greatest economic consequences. Data come from U.S. National Oceanic and Atmospheric Administration’s (NOAA) storm database which tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage. The events in the database start in the year 1950 and end in November 2011. Data documentation can be found here <a href="https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf">data documentatnion</a></p>
 </div>
 <div id="analysis-steps" class="section level3">
@@ -1658,10 +1658,10 @@ summary {
 <p>Load necessary libraries.</p>
 <pre class="r"><code>if (!require(&#39;ggplot2&#39;)) 
   install.packages(&#39;ggplot2&#39;); 
-
 library(ggplot2)
 
 if (!require(&#39;cowplot&#39;)) 
+   install.packages(&#39;cowplot&#39;); 
 library(cowplot)</code></pre>
 <p>Download and read csv file.</p>
 <pre class="r"><code>url = &quot;https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2&quot;

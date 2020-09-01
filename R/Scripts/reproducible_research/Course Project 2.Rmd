@@ -1,9 +1,9 @@
 ---
 title: "U.S. National Oceanic and Atmospheric Administration's (NOAA) data analize"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 ## Synopsis
 
@@ -25,10 +25,10 @@ Load necessary libraries.
 ```{r load libraries, warning=FALSE, message=FALSE}
 if (!require('ggplot2')) 
   install.packages('ggplot2'); 
-
 library(ggplot2)
 
 if (!require('cowplot')) 
+   install.packages('cowplot'); 
 library(cowplot)
 
 ```
