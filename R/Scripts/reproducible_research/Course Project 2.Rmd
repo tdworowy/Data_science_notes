@@ -5,19 +5,30 @@ output:
   html_document:
     df_print: paged
 ---
-## summary
-
-Course Project 2 for coursera reproducible research course. Goal of analysis is to find which types of events are most harmful with respect to population health and which have the greatest economic consequences.
-Data come from  U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database which tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage. The events in the database start in the year 1950 and end in November 2011. 
-
 ## Synopsis
 
-TODO synopsis  
+### Summary
+
+Course Project 2 for coursera reproducible research course. Goal of analysis is to find which types of events are most harmful with respect to population health and which have the greatest economic consequences.
+Data come from  U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database which tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage. The events in the database start in the year 1950 and end in November 2011. Data documentation can be found here [data documentatnion](https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf) 
+
+
+### Analysis steps
+1. Required libraries was installed and loaded (ggplot2 and cowplot).
+2. Data was downloaded from [Storm Data ](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2) and loaded to "data] data frame
+3. Data subsets was Create with 0.99 quantile, use to find most harmful events.
+4. Result plots was Create using ggplot2 and cowplot. Log function is use to scale the data the dominance of the plots by outlier data.
 
 ## Data Processing
+
 Load necessary libraries.
 ```{r load libraries, warning=FALSE, message=FALSE}
+if (!require('ggplot2')) 
+  install.packages('ggplot2'); 
+
 library(ggplot2)
+
+if (!require('cowplot')) 
 library(cowplot)
 
 ```
@@ -77,11 +88,12 @@ i <- ggplot(injuries_99, aes(x=log(INJURIES),y=EVTYPE)) +
 
 plot_grid(f,i,nrow = 2, ncol = 1)
 ```
-Fatalities:
+
+Fatalities quantiles:
 ```{r}
 print(quantile(data$FATALITIES))
 ```
-Injuries:
+Injuries quantiles:
 ```{r}
 print(quantile(data$INJURIES))
 ```
@@ -107,11 +119,11 @@ i <- ggplot(crop_damage_99, aes(x=log(CROPDMG),y=EVTYPE)) +
 plot_grid(f,i,nrow = 2, ncol = 1)
 ```
 
-Property damage:
+Property damage quantiles:
 ```{r}
 print(quantile(data$PROPDMG))
 ```
-Crop damage:
+Crop damage quantiles:
 ```{r}
 print(quantile(data$CROPDMG))
 ```
