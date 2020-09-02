@@ -1,9 +1,9 @@
 ---
 title: "U.S. National Oceanic and Atmospheric Administration's (NOAA) data analize"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 ---
 ## Synopsis
 
@@ -17,7 +17,8 @@ Data come from  U.S. National Oceanic and Atmospheric Administration's (NOAA) st
 1. Required libraries was installed and loaded (ggplot2 and cowplot).
 2. Data was downloaded from [Storm Data ](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2) and loaded to "data] data frame
 3. Data subsets was Create with 0.99 quantile, use to find most harmful events.
-4. Result plots was Create using ggplot2 and cowplot. Log function is use to scale the data the dominance of the plots by outlier data.
+4. In case of property and corp damage the value need to be multiplied by 10 to power of exponent. 
+5. Result plots was Create using ggplot2 and cowplot. Log function is use to scale the data the dominance of the plots by outlier data.
 
 ## Data Processing
 
@@ -55,13 +56,43 @@ injuries_99 <- subset(injuries, INJURIES > q_injuries[4])
 ```
 Create data set "property_damage_99", which is a subset of original data with events with number of property greater than 99% of data.
 ```{r,property_damage_subset}
-property_damage <- subset(data, PROPDMG>0)
+property_damage <- subset(data, PROPDMG>0 & !(PROPDMGEXP %in% c("+","-","?")))
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "K"] <- 3
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "M"] <- 6
+property_damage$PROPEXP[property_damage$PROPDMGEXP == ""] <- 0
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "B"] <- 9
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "m"] <- 6
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "0"] <- 0
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "5"] <- 5
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "6"] <- 6
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "4"] <- 4
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "2"] <- 2
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "3"] <- 3
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "h"] <- 2
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "7"] <- 7
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "H"] <- 2
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "1"] <- 1
+property_damage$PROPEXP[property_damage$PROPDMGEXP == "8"] <- 8
+
+property_damage$PROPDMG <- property_damage$PROPDMG * (10 ** property_damage$PROPEXP)
+
 q_property_damage <-quantile(property_damage$PROPDMG, probs=c(.25,.50,0.95,0.9998))
 property_damage_99 <- subset(property_damage, PROPDMG > q_property_damage[4])
 ```
 Create data set "crop_damage_99", which is a subset of original data with events with number of crop damages greater than 99% of data.
 ```{r,crop_damage_subset}
-crop_damage <- subset(data, CROPDMG>0)
+crop_damage <- subset(data, CROPDMG>0  & !(CROPDMGEXP %in% c("+","-","?")))
+crop_damage$CROPEXP[crop_damage$CROPDMGEXP == "M"] <- 6
+crop_damage$CROPEXP[crop_damage$CROPDMGEXP == "K"] <- 3
+crop_damage$CROPEXP[crop_damage$CROPDMGEXP == "m"] <- 6
+crop_damage$CROPEXP[crop_damage$CROPDMGEXP == "B"] <- 9
+crop_damage$CROPEXP[crop_damage$CROPDMGEXP == "0"] <- 0
+crop_damage$CROPEXP[crop_damage$CROPDMGEXP == "k"] <- 3
+crop_damage$CROPEXP[crop_damage$CROPDMGEXP == "2"] <- 2
+crop_damage$CROPEXP[crop_damage$CROPDMGEXP == ""] <- 0
+
+crop_damage$CROPDMG <- crop_damage$CROPDMG * (10 ** crop_damage$CROPEXP)
+
 q_crop_damage <-quantile(crop_damage$CROPDMG, probs=c(.25,.50,0.95,0.998))
 crop_damage_99 <- subset(crop_damage, CROPDMG > q_crop_damage[4])
 ```
@@ -73,14 +104,14 @@ crop_damage_99 <- subset(crop_damage, CROPDMG > q_crop_damage[4])
 ```{r harmfuless}
 
 f <- ggplot(fatalites_99, aes(x=log(FATALITIES),y=EVTYPE)) + 
-      geom_bar(fill="red",stat="identity" ) + 
+      geom_bar(fill="red",stat="identity") + 
       ggtitle("Fatalities per event type") + 
       xlab("log(Fatalities)") +
       ylab("Event type") +
       theme_dark()
 
 i <- ggplot(injuries_99, aes(x=log(INJURIES),y=EVTYPE)) + 
-      geom_bar(fill="red",stat="identity" ) + 
+      geom_bar(fill="red",stat="identity") + 
       ggtitle("Injuries per event type") + 
       xlab("log(Injuries)") +
       ylab("Event type") +
@@ -103,14 +134,14 @@ As we can see vast majority of fatalities and injures is caused by less than 1% 
 ```{r economic_consequences }
 
 f <- ggplot(property_damage_99, aes(x=log(PROPDMG),y=EVTYPE)) + 
-      geom_bar(fill="red",stat="identity" ) + 
+      geom_bar(fill="red",stat="identity") + 
       ggtitle("Property denage per event type") + 
       xlab("log(Property demege)") +
       ylab("Event type") +
       theme_dark()
 
 i <- ggplot(crop_damage_99, aes(x=log(CROPDMG),y=EVTYPE)) + 
-      geom_bar(fill="red",stat="identity" ) + 
+      geom_bar(fill="red",stat="identity") + 
       ggtitle("Crop demmage per event type") + 
       xlab("log(Crop demage)") +
       ylab("Event type") +
