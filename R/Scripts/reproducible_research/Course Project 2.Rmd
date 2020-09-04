@@ -1,9 +1,9 @@
 ---
 title: "U.S. National Oceanic and Atmospheric Administration's (NOAA) data analize"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 ## Synopsis
 
@@ -17,7 +17,7 @@ Data come from  U.S. National Oceanic and Atmospheric Administration's (NOAA) st
 1. Required libraries was installed and loaded (ggplot2 and cowplot).
 2. Data was downloaded from [Storm Data ](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2) and loaded to "data] data frame
 3. Data subsets was Create with 0.99 quantile, use to find most harmful events.
-4. In case of property and corp damage the value need to be multiplied by 10 to power of exponent. 
+4. In case of property and corp damage the value need to be multiplied by 10 to power of exponent (PROPDMGEXP or CROPDMGEXP). 
 5. Result plots was Create using ggplot2 and cowplot. Log function is use to scale the data the dominance of the plots by outlier data.
 
 ## Data Processing
@@ -45,13 +45,13 @@ data <- read.csv(file)
 Create data set "fatalities_99", which is a subset of original data with events with number of fatalities greater than 99% of data.
 ```{r,fatalites_subset}
 fatalites <- subset(data, FATALITIES>0)
-q_fatalites <-quantile(fatalites$FATALITIES, probs=c(.25,.50,0.95,0.99))
+q_fatalites <-quantile(fatalites$FATALITIES, probs=c(.25,.50,0.95,0.993))
 fatalites_99 <- subset(fatalites, FATALITIES > q_fatalites[4])
 ```
 Create data set "injuries_99", which is a subset of original data with events with number of injuries greater than 99% of data.
 ```{r,injuriess_subset}
 injuries <- subset(data, INJURIES>0)
-q_injuries <-quantile(injuries$INJURIES, probs=c(.25,.50,0.95,0.99))
+q_injuries <-quantile(injuries$INJURIES, probs=c(.25,.50,0.95,0.993))
 injuries_99 <- subset(injuries, INJURIES > q_injuries[4])
 ```
 Create data set "property_damage_99", which is a subset of original data with events with number of property greater than 99% of data.
@@ -101,7 +101,7 @@ crop_damage_99 <- subset(crop_damage, CROPDMG > q_crop_damage[4])
 
 ### Witch events are most harmful.
 
-```{r harmfuless}
+```{r harmfuless, fig.height=9}
 
 f <- ggplot(fatalites_99, aes(x=log(FATALITIES),y=EVTYPE)) + 
       geom_bar(fill="red",stat="identity") + 
@@ -131,7 +131,7 @@ print(quantile(data$INJURIES))
 As we can see vast majority of fatalities and injures is caused by less than 1% of events.The most harmful ones are: tornadoes, floods, excessive and extreme heat and head in general. One interesting thing worth noting is that floods cause lots of the injures but almost non of the fatalities.  
 
 ### Witch events have the greatest economic consequences.
-```{r economic_consequences }
+```{r economic_consequences, fig.height=9}
 
 f <- ggplot(property_damage_99, aes(x=log(PROPDMG),y=EVTYPE)) + 
       geom_bar(fill="red",stat="identity") + 
