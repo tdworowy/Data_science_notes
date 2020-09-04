@@ -98,3 +98,14 @@ ggplot(roc_df, aes(x=specificity, y=recall)) +
   theme_bw() + theme(plot.margin=unit(c(5.5, 10, 5.5, 5.5), "points"))
 
 
+# AUC - area under curve (ROC) - classification metrics
+sum(roc_df$recall[-1] * diff(1- roc_df$specificity))
+
+# AUC visualization
+ggplot(roc_df, aes(specificity)) +
+  geom_ribbon(aes(ymin=0, ymax=recall), fill='blue', alpha=.3) +
+  scale_x_reverse(expand=c(0, 0)) +
+  scale_y_continuous(expand=c(0, 0)) +
+  labs(y='recall') +
+  theme_bw() + theme(plot.margin=unit(c(5.5, 10, 5.5, 5.5), "points"))
+graph
