@@ -1,5 +1,5 @@
 library(ggplot2)
-)
+
 
 data <- read.csv("Data/sp500_data.csv")
 
@@ -11,4 +11,5 @@ df <- data[row.names(data) >= '2011-01-01', syms1]
 d <- dist(t(df))
 hcl <- hclust(d)
 
-plot(hlc)
+plot(hcl, ylab='distance', xlab='', sub='', main='')
+cutree(hcl, k=4)
