@@ -32,3 +32,20 @@ centers$Color <- centers$Mean > 0
 ggplot(centers, aes(x = Symbol, y = Mean, fill = Color)) + 
   geom_bar(stat="identity", position = "identity", width=.75) +
   facet_grid(Cluster ~ ., scales = "free_y")
+
+
+# try to find best number of clusters (how many clusters explains most of data variance)
+pct_var <- data.frame(pct_var = 0, num_clusters = 2:20)
+totals <- kmeans(top_sp, centers = 20, nstart = 50, iter.max = 100)$totss
+
+for(i in 2:20) {
+  kmCluster <- kmeans(top_sp, centers = i, nstart = 50, iter.max = 100)
+  pct_var[i-1,'pct_var'] <- kmCluster$betweenss / totals
+}
+
+ggplot(pct_var, aes(x=num_clusters, y=pct_var)) +
+  geom_line() +
+  geom_point() +
+  labs(y='% Variance Explained', x='Number of Clusters') +
+  scale_x_continuous(breaks=seq(2, 20, by=2))   +
+  theme_dark()
