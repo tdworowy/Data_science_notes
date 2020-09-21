@@ -1,0 +1,98 @@
+---
+title: 'Part 1: Simulation Exercise'
+author: "Tomasz Dworowy"
+output: pdf_document
+---
+```{r, setup}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+```{r, load_libraries}
+if (!require("ggplot2"))
+  install.packages("ggplot2")
+library(ggplot2)
+```
+
+# Overview
+
+Goal of this rapport is to investigate the exponential distribution in R and compare it with the Central Limit Theorem. The mean of exponential distribution and the standard deviation are both equal to 1/lambda. Lambda is set to 0.2 for all of the simulations. Analysis is done for diminution of averages of 40 exponentials for thousand simulations.
+
+# Simulations
+Set variables.
+```{r, setup_variables }
+set.seed(999)
+lambda = 0.2
+exponentials = 40
+n = 1000
+```
+
+Run Simulations.
+```{r, sibulations}
+means = NULL
+for (i in 1 : n) means = c(means, mean(rexp(exponentials, lambda)))
+```
+
+# Sample Mean versus Theoretical Mean
+
+## Sample Mean
+Calculating the mean from the simulations with give the sample mean.
+```{r, sample_mean}
+sample_mean <- mean(means)
+sample_mean
+```
+
+## Theoretical Mean
+The theoretical mean of an exponential distribution is lambda^-1.
+```{r,theoretical_mean }
+theoretical_mean <- lambda^-1
+theoretical_mean
+```
+The difference between the sample mean **(`r sample_mean`)** and theoretical mean **(`r theoretical_mean`)** is **`r sample_mean-theoretical_mean`**
+
+```{r means_plot}
+ggplot(as.data.frame(means), aes(x=means)) +
+     geom_histogram(binwidth = .3, color = "black", fill = "blue") + 
+     geom_vline(aes(xintercept = sample_mean, color = "green")) +
+     geom_vline(aes(xintercept = theoretical_mean, color = "red")) +
+     labs(title = "Sample Mean versus Theoretical Mean", x = "Sample means") +
+     scale_color_discrete(name = "Means", labels = c("Sample mean", "Theoretical mean"))
+  
+```
+
+# Sample Variance versus Theoretical Variance
+
+## Sample Variance
+Calculating the variance from the simulations with give the sample mean.
+```{r, sample_variance}
+sample_var <- var(means)
+sample_var
+```
+
+## Theoretical Variance
+The theoretical variance of an exponential distribution (lambda * sqrt(n))^-2.
+```{r, theoretical_variance}
+theoretical_var <- (lambda * sqrt(exponentials))^-2
+theoretical_var
+```
+The difference between the sample variance **(`r sample_var`)** and theoretical variance **(`r theoretical_var`)** is **`r sample_var-theoretical_var`**
+
+```{r, Variance_plot}
+cumvar <- cumsum((means - sample_mean)^2)/(seq_along(means - 1))
+ggplot(data.frame(x = 1:n, y = cumvar), aes(x = x, y = y)) +
+ geom_hline(aes(yintercept = sample_var, colour = 'red')) + geom_line(size = 1) +
+ geom_hline(aes(yintercept = theoretical_var, colour = 'green')) + geom_line(size = 1) +
+ labs(x = "Number of simulations", y = "Cumulative variance") +
+scale_color_discrete(name = "Variance", labels = c("Sample variance", "Theoretical variance"))
+
+```
+
+# Distribution
+Show that the distribution is approximately normal.
+```{r, distribution}
+ggplot(as.data.frame(means), aes(x=means)) +
+    geom_histogram(aes(y = ..density..),colour="black",fill="blue")+
+    stat_function(fun=dnorm, args=list( mean=sample_mean, sd=sqrt(sample_var)),geom="line",color = "black", size = 1.0)+
+    scale_x_continuous("Sample means")+
+    ylab("Density")
+```
+As we can see distribution follows raffly the normal bell shape distribution.
