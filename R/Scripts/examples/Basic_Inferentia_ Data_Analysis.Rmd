@@ -1,0 +1,84 @@
+---
+title: 'Part 2: Basic Inferential Data Analysis'
+author: "Tomasz Dworowy"
+output: pdf_document
+---
+
+```{r, setup}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+```{r, load_libraries}
+if (!require("ggplot2"))
+  install.packages("ggplot2")
+library(ggplot2)
+if (!require("pander"))
+  install.packages("pander")
+library(pander)
+```
+
+```{r, load_data_set}
+data(ToothGrowth)
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+```
+# Overview
+Goal of this analysis is to perform exploratory analyses and hypothesis testing to compare tooth growth coused by supplement type and dose on ToothGrowth R data set.
+
+# Exploratory analisis
+
+## data summary
+```{r, summary}
+summary(ToothGrowth)
+str(ToothGrowth)
+```
+
+## BoxPlot that shows relation between lenght and dose grouped by supplement type.
+```{r, boxplot1}
+ ggplot(ToothGrowth, aes(x = dose, y = len,color = dose)) + 
+  geom_boxplot(outlier.colour = "red") +
+  facet_grid(.~supp)
+```
+
+## BoxPlot that shows relation between lenght and supplement type grouped by dose.
+```{r, boxplot2}
+ ggplot(ToothGrowth, aes(x = supp, y = len,color = dose)) + 
+  geom_boxplot(outlier.colour = "red") +
+  facet_grid(.~dose)
+```
+
+## BoxPlot that shows relation between lenght by supplement type in general.
+```{r, boxplot3}
+ ggplot(ToothGrowth, aes(x = supp, y = len, color = supp)) + 
+  geom_boxplot(outlier.colour = "red")
+```
+
+## BoxPlot that shows relation between lenght by dose in general.
+```{r, boxplot4}
+ ggplot(ToothGrowth, aes(x = dose, y = len, color = dose)) + 
+  geom_boxplot(outlier.colour = "red")
+```
+
+## conclusion 
+It seams that there is strong correlation between tooth growth and dose and little or not difference between supplements. 
+
+# Hypothesis testing 
+
+Three hypothesis are tested:
+
+* Test if there is a difference in tooth growth effect between supplements.
+* Test if there is a difference in tooth growth effect between dose 0.5 and 1. 
+* Test if there is a difference in tooth growth effect between dose 1 and 2.
+
+```{r, hippothesis_testing}
+test1 <- t.test(len ~ supp, data = ToothGrowth, var.equal = FALSE, paired=FALSE ,conf.level = .95)
+pander(test1)
+
+test2 <- t.test(len ~ dose, data = subset(ToothGrowth, dose %in% c(0.5,1)), var.equal = FALSE, paired=FALSE ,conf.level = .95)
+pander(test2)
+
+test3 <- t.test(len ~ dose, data = subset(ToothGrowth, dose %in% c(1,2)), var.equal = FALSE, paired=FALSE ,conf.level = .95)
+pander(test3)
+```
+
+## conclusion 
+For first test p value is greater than significance level so null hypothesis cannot by rejected, which means that there is not difference between supplements in their effects in tooth growth. But second and third tests shows that supplement dose have different effects for tooth growth.  
