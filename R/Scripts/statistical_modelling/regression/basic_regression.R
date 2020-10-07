@@ -41,4 +41,12 @@ ggplot(data, aes(x = parent, y = child)) +
   
 
 
-lm(child ~ parent, data=galton)
+fit <- lm(child ~ parent, data=galton)
+
+plot(predict(fit), resid(fit)) # residuals
+
+fit_df <- data.frame(predict = predict(fit), resid = resid(fit))
+
+ggplot(fit_df,aes(x = predict, y = resid )) +
+  geom_point() +
+  geom_smooth()
