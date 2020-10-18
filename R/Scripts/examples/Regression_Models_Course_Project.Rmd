@@ -1,0 +1,101 @@
+---
+title: 'Regression Models Course Project'
+author: "Tomasz Dworowy"
+output: pdf_document
+---
+
+```{r, setup}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+```{r, load_libraries}
+if (!require("ggplot2"))
+  install.packages("ggplot2")
+library(ggplot2)
+
+```
+```{r,load_data}
+data("mtcars")
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$vs <- as.factor(mtcars$vs)
+mtcars$am <- factor(mtcars$am,labels = c("automatic","manual"))
+mtcars$gear <- factor(mtcars$gear)
+mtcars$carb <- factor(mtcars$carb)
+```
+
+# Summary
+Goal of this analysis is to explore relationship between  miles per gallon and transition type (automatic and manual). The `mtcars` data set was used,
+
+# Exploratory analisis
+
+## Data summary
+Data summary:
+```{r,data_summary}
+summary(mtcars)
+```
+```{r,mpg_mean}
+auto_mpg_mean <- mean(subset(mtcars, am==0)$mpg)
+manual_mpg_mean <- mean(subset(mtcars, am==1)$mpg)
+```
+
+Mean miles per gallon for automatic transmission is `r auto_mpg_mean` and for manual transmission is `r manual_mpg_mean`. So at first glance we can see that mqp for manual transmission seems to be better,
+the **Appendix Figure I** and **Appendix Figure II**  seem to confirm the same observations.
+
+# Statistical Inference
+T-Test transmission type and MPG
+```{r, t_test}
+results <- t.test(mpg ~ am, data = mtcars)
+p_value <- results$p.value
+```
+P-value `r p_value` is smaller than 0.5 so we should rejects the null hypothesis, so the difference between in mpg between transmissions is statistically significant. 
+```{r}
+estimate <- results$estimate
+```
+The difference estimate between the 2 transmissions is `r estimate[2] - estimate[1]` mpg better for manual.
+
+# Regression Analysis
+Fit the full model of the data
+```{r full_fit}
+full_fit <- glm(mpg ~ ., data = mtcars)
+summary(full_fit)$coeff
+```
+See **Appendix Figure III** for residuals plot.
+
+Fit model only with transition type and mpg.
+```{r min_fit}
+min_fit <- glm(mpg ~ am, data = mtcars)
+summary(min_fit)$coeff
+```
+See **Appendix Figure IV** for residuals plot.
+
+# Conclusion
+Difference in MPG based on transmission type is significant. At least in this data set cars with manual transition have slightly better miles per gallon usage. However, weight, horsepower and number of cylinders have significant influence to.   
+
+# Appendix Figures
+
+#### Figure I
+```{r, figure_1 }
+ggplot(aes(x = am, y=mpg ),data=mtcars) +
+  geom_boxplot(aes(fill=am))
+
+```
+
+#### Figure II
+```{r, figure_2 }
+ggplot(aes(x = mpg, y=am ),data=mtcars) +
+  geom_point(aes(color=am)) 
+
+```
+
+#### Figure III
+```{r, figure_3 }
+par(mfrow=c(2,2))
+plot(full_fit)
+```
+
+#### Figure IV
+```{r, figure_4 }
+par(mfrow=c(2,2))
+plot(min_fit)
+```
+
