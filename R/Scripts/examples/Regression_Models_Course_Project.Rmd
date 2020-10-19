@@ -34,8 +34,8 @@ Data summary:
 summary(mtcars)
 ```
 ```{r,mpg_mean}
-auto_mpg_mean <- mean(subset(mtcars, am==0)$mpg)
-manual_mpg_mean <- mean(subset(mtcars, am==1)$mpg)
+auto_mpg_mean <- mean(subset(mtcars, am=="automatic")$mpg)
+manual_mpg_mean <- mean(subset(mtcars, am=="manual")$mpg)
 ```
 
 Mean miles per gallon for automatic transmission is `r auto_mpg_mean` and for manual transmission is `r manual_mpg_mean`. So at first glance we can see that mqp for manual transmission seems to be better,
