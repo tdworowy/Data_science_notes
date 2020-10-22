@@ -3,6 +3,7 @@ install.packages("lava")
 require('caret')
 require('kernlab')
 
+data(spam)
 in_train <- createDataPartition( y = spam$type, p = 0.75, list = FALSE)
 
 traning <- spam[in_train,]

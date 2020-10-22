@@ -2,6 +2,7 @@ install.packages("gower")
 install.packages("lava")
 require('caret')
 require('Hmisc')
+require('ISLR')
 require('gridExtra')
 
 #ploting
