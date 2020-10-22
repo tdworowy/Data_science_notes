@@ -22,6 +22,6 @@ head(predict(dummyies, newdata = traning))
 nsv <- nearZeroVar(traning, saveMetrics = TRUE)
 nsv
 
-#splin basis (can be ussfule in linear regression)
+#splin basis (can be useful in linear regression)
 bsBasis <- bs(traning$age, df = 3) # create 3 polynomial values age ** 1 ate ** 2 and age ** 3
 head(bsBasis)
