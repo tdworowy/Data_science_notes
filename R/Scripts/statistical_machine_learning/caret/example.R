@@ -22,3 +22,16 @@ adData = data.frame(diagnosis,predictors)
 inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]
 training = adData[ inTrain,]
 testing = adData[-inTrain,]
+
+#_______
+
+data(segmentationOriginal)
+
+set.seed(125)
+in_train <- createDataPartition( y = segmentationOriginal$Case , p = 0.75, list = FALSE)
+training = segmentationOriginal[ in_train,]
+testing = segmentationOriginal[-in_train,]
+
+fit <- train(Case ~ ., data = training, nethod = 'rpart')
+
+fit$finalModel
