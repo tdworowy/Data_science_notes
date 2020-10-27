@@ -1,0 +1,81 @@
+---
+title: 'Practical Machine Learning'
+author: "Tomasz Dworowy"
+output: html_document
+---
+
+```{r, setup}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+```{r, load_libraries}
+if (!require("ggplot2"))
+  install.packages("ggplot2")
+library(ggplot2)
+if (!require("caret"))
+  install.packages("caret")
+library(caret)
+if (!require("parallel"))
+  install.packages("parallel")
+library(parallel)
+if (!require("doParallel"))
+  install.packages("doParallel")
+library(doParallel)
+
+```
+``` {r, prepare_cluseer}
+cluster <- makeCluster(detectCores() - 1)
+registerDoParallel(cluster)
+```
+```{r, dwonload_data}
+traning_file <- "pml-training.csv"
+testing_file <- "pml-testing.csv"
+if(!file.exists(traning_file)) {
+    download.file('https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv',
+                  destfile = traning_file)}
+if(!file.exists(testing_file)) {
+  download.file('https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv',
+              destfile = testing_file)}
+```
+# Load and clear data
+TODO
+
+```{r, load_data,  cache=TRUE}
+traning <- read.csv(traning_file)
+testing <- read.csv(testing_file)
+
+
+traning$classe <- as.factor(traning$classe)
+traning <- Filter(function(x) !any(is.na(x)), traning)
+traning <- traning[,-nearZeroVar(traning)]
+
+partitoin <- createDataPartition( y = traning$classe, p = 0.7, list = FALSE)
+
+traning <- traning[partitoin,]
+validation <- traning[-partitoin,]
+
+```
+
+
+# Summary 
+TODO
+
+# Machine learning
+
+```{r, configure_train_control}
+fitControl <- trainControl(method = "cv",
+number = 5,
+allowParallel = TRUE)
+```
+## Model 1 - random forest
+TODO - description, some plot
+
+```{r, random_forest,  cache=TRUE}
+#TODO it take to much time
+fit_rf <- train(classe ~., data = traning, method = 'rf', prox = TRUE, trControl = fitControl)
+predictions_rf <- predict(fit_rf, newdata = validation)
+
+confusionMatrix(predictions, validation$classe)
+```
+## Model 2 - Bosting
+TODO - model,description. some plot

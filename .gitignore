@@ -9,4 +9,5 @@ gym-bandits
 .Rhistory
 Data
 UCI HAR Dataset
-Course-Project-2_cache
+*_cache
+*.csv
