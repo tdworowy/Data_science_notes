@@ -1,13 +1,16 @@
 ---
-title: 'Practical Machine Learning'
+title: 'Coursera - Practical Machine Learning - assigment'
 author: "Tomasz Dworowy"
 output: html_document
 ---
+
+# Setup
 
 ```{r, setup}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
 
+Load libraries.
 ```{r, load_libraries}
 if (!require("ggplot2"))
   install.packages("ggplot2")
@@ -23,10 +26,14 @@ if (!require("doParallel"))
 library(doParallel)
 
 ```
+
+Setup parallel data processing.
 ``` {r, prepare_cluseer}
 cluster <- makeCluster(detectCores() - 1)
 registerDoParallel(cluster)
 ```
+
+Download data.
 ```{r, dwonload_data}
 traning_file <- "pml-training.csv"
 testing_file <- "pml-testing.csv"
@@ -38,15 +45,24 @@ if(!file.exists(testing_file)) {
               destfile = testing_file)}
 ```
 # Load and clear data
-TODO
 
+Load data
 ```{r, load_data,  cache=TRUE}
 traning <- read.csv(traning_file)
 testing <- read.csv(testing_file)
+```
 
-
+Data Clean up
+* Remove columns witch NAs
+* Remove columns witch redundant data
+* split data to training and validation sets
+```{r, clean_data,  cache=TRUE}
 traning$classe <- as.factor(traning$classe)
 traning <- Filter(function(x) !any(is.na(x)), traning)
+
+traning_remove <- grepl("^X|timestamp|window", names(traning))
+traning <- traning[, !traning_remove]
+
 traning <- traning[,-nearZeroVar(traning)]
 
 partitoin <- createDataPartition( y = traning$classe, p = 0.7, list = FALSE)
@@ -54,11 +70,17 @@ partitoin <- createDataPartition( y = traning$classe, p = 0.7, list = FALSE)
 traning <- traning[partitoin,]
 validation <- traning[-partitoin,]
 
+testing <- testing[,names(traning[, which(names(traning) != "classe")])]
 ```
 
+Use data subset (due performance problems)
+```{r, data_subset}
+traning <- traning[sample(1:nrow(traning), 3000,
+   replace=FALSE),] 
+```
 
-# Summary 
-TODO
+# Background 
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset). 
 
 # Machine learning
 
@@ -68,14 +90,54 @@ number = 5,
 allowParallel = TRUE)
 ```
 ## Model 1 - random forest
-TODO - description, some plot
+First model - random forest.
 
 ```{r, random_forest,  cache=TRUE}
-#TODO it take to much time
-fit_rf <- train(classe ~., data = traning, method = 'rf', prox = TRUE, trControl = fitControl)
-predictions_rf <- predict(fit_rf, newdata = validation)
+fit_rf <- train(classe ~., data = traning, method = 'rf', prox = TRUE, trControl = fitControl, ntree=250)
 
-confusionMatrix(predictions, validation$classe)
 ```
-## Model 2 - Bosting
-TODO - model,description. some plot
+
+```{r, predict_random_forest}
+predictions_rf <- predict(fit_rf, newdata = validation)
+confusionMatrix(predictions_rf, validation$classe)
+```
+
+```{r, random_forest_plot1} 
+ggplot(fit_rf)
+```
+
+```{r, random_forest_plot2} 
+plot(fit_rf$finalModel)
+```
+
+## Model 2 - Boosting 
+Second model - boosting. 
+
+```{r, boosting,  cache=TRUE}
+fit_gbm <- train(classe ~., data = traning, method = 'gbm', trControl = fitControl)
+```
+
+```{r, predict_boosting}
+predictions_gbm <- predict(fit_gbm, newdata = validation)
+confusionMatrix(predictions_gbm, validation$classe)
+```
+
+```{r, boosting_plot1} 
+ggplot(fit_gbm)
+```
+```{r, bosting_plot2} 
+plot(fit_gbm$finalModel)
+```
+
+##  Predictions
+Apply models to original testing data set.
+
+```{r, testing}
+
+predictions_testing1 <- predict(fit_rf, newdata = testing)
+predictions_testing1
+
+predictions_testing2 <- predict(fit_gbm, newdata = testing)
+predictions_testing2
+
+```
