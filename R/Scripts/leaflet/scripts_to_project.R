@@ -7,7 +7,6 @@ data_subset <- data_subset %>% select (city_latitude,city_longitude,popup)
 data_subset <- data_subset[complete.cases(data_subset),]
 
 
-
 map1 <-data_subset %>%
   leaflet() %>%
   addTiles() %>%
