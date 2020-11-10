@@ -1,0 +1,44 @@
+---
+title: "Week 3 Assigment - R Markdown Presentation & Plotly"
+author: "Tomasz Dworowy"
+date: "11/10/2020"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, include = TRUE)
+```
+
+```{r, load libraries}
+if (!require("plotly"))
+  install.packages("plotly")
+library(plotly)
+if (!require("dplyr"))
+  install.packages("dplyr")
+library(dplyr)
+```
+
+```{r, load_data}
+#https://data.world/timothyrenner/ufo-sightings/workspace/file?filename=nuforc_reports.csv
+data <- read.csv("nuforc_reports.csv")
+
+data_subset <- data %>% select (city,shape,date_time,duration)
+data_subset <- data_subset[complete.cases(data_subset),]
+data_subset$date_time<- as.Date(data_subset$date_time)
+
+data_subset <-data_subset[data_subset$shape %in% c("circle","disk","changing","cigar","cylinder"),]
+
+```
+
+## Top 5 Ufo shapes by year - data from The National UFO Reporting Center (nuforc) Online Database (subset)
+
+***
+```{r, plotly_plot, fig.width=8, fig.height=6}
+
+g <- ggplot(data = data_subset, aes(x = date_time)) +
+  geom_bar(aes(color=shape)) +
+  facet_wrap(~shape)
+
+ggplotly(g)
+
+```

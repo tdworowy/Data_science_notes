@@ -20,7 +20,7 @@ library(dplyr)
 
 ```{r, load_data}
 #https://data.world/timothyrenner/ufo-sightings/workspace/file?filename=nuforc_reports.csv
-data <- read.csv("nuforc_reports.csv")
+data <- read.csv("Data/nuforc_reports.csv")
 
 data_subset <- data %>% select (city_latitude ,city_longitude,stats,summary,shape)
 data_subset$popup <- paste(data_subset$stats,"Summary:",data_subset$summary,"Shape:",data_subset$shape)
