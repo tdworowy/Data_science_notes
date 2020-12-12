@@ -36,3 +36,5 @@ if __name__ == '__main__':
     standard_scalar = StandardScaler()
     x_train = standard_scalar.fit_transform(x_train)
     x_test = standard_scalar.fit(x_test)
+
+    print(x_train)
