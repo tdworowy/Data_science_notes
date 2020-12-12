@@ -12,3 +12,4 @@ UCI HAR Dataset
 *_cache
 *.csv
 rsconnect
+.ipynb_checkpoints
