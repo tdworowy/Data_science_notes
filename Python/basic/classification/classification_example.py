@@ -2,7 +2,8 @@
 /Social_Network_Ads.csv '''
 
 import pandas as pd
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 
 def feature_to_one_hot(data_set: pd.DataFrame, column: str) -> pd.DataFrame:
@@ -16,7 +17,7 @@ def feature_to_one_hot(data_set: pd.DataFrame, column: str) -> pd.DataFrame:
 
 if __name__ == '__main__':
     data_set = pd.read_csv('../../data/Social_Network_Ads.csv')
-   
+
     '''Feature engendering'''
     data_set = data_set.drop(columns=['User ID'])  # remove user id column
 
@@ -25,3 +26,13 @@ if __name__ == '__main__':
 
     data_set = pd.concat([genders, data_set.iloc[:, 1:]], axis=1, sort=False)
     print(data_set.head(6))
+
+    y = data_set['Purchased']
+    x = data_set.drop(columns='Purchased')
+
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, random_state=0)
+
+    '''Feature normalization (scaling)'''
+    standard_scalar = StandardScaler()
+    x_train = standard_scalar.fit_transform(x_train)
+    x_test = standard_scalar.fit(x_test)
