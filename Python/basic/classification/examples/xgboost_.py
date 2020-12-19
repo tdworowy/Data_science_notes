@@ -1,11 +1,11 @@
 from sklearn.metrics import confusion_matrix
 from xgboost import XGBClassifier
 
-from Python.basic.classification.data_preparation import get_data
-from Python.basic.classification.utils import calculate_metrics
+from Python.basic.data_preparation import get_data_classification
+from Python.basic.utils import calculate_metrics
 
 if __name__ == '__main__':
-    x_train, x_test, y_train, y_test = get_data()
+    x_train, x_test, y_train, y_test = get_data_classification()
 
     xgb_classifier = XGBClassifier(verbosity=3, n_estimators=10, max_depth=3)
     xgb_classifier.fit(x_train, y_train)

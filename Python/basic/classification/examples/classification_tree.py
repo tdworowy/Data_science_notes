@@ -3,8 +3,8 @@ from sklearn import tree
 from sklearn.metrics import confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
 
-from Python.basic.classification.data_preparation import get_data
-from Python.basic.classification.utils import calculate_metrics
+from Python.basic.data_preparation import get_data_classification
+from Python.basic.utils import calculate_metrics
 
 
 def decision_tree(x_train, y_train, x_test, y_test) -> tuple:
@@ -26,7 +26,7 @@ def decision_tree(x_train, y_train, x_test, y_test) -> tuple:
 
 
 if __name__ == '__main__':
-    x_train, x_test, y_train, y_test = get_data()
+    x_train, x_test, y_train, y_test = get_data_classification()
     cm, fig = decision_tree(x_train=x_train,
                             y_train=y_train,
                             x_test=x_test,

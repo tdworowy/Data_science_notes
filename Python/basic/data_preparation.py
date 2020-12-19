@@ -1,12 +1,14 @@
 ''' https://raw.githubusercontent.com/PacktPublishing/40-Algorithms-Every-Programmer-Should-Know/master/Chapter07
-/Social_Network_Ads.csv '''
+/Social_Network_Ads.csv
+'https://raw.githubusercontent.com/PacktPublishing/40-Algorithms-Every-Programmer-Should-Know/master/Chapter07/auto.csv'''
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from os import path
 
-data_file =path.join(path.dirname(path.abspath(__file__)), '../../data/Social_Network_Ads.csv')
+data_file_classification = path.join(path.dirname(path.abspath(__file__)), '../data/Social_Network_Ads.csv')
+data_file_regression = path.join(path.dirname(path.abspath(__file__)), '../data/auto.csv')
 
 
 def feature_to_one_hot(data_set: pd.DataFrame, column: str) -> pd.DataFrame:
@@ -18,8 +20,8 @@ def feature_to_one_hot(data_set: pd.DataFrame, column: str) -> pd.DataFrame:
     return one_hot_labels
 
 
-def get_data():
-    data_set = pd.read_csv(data_file)
+def get_data_classification() -> tuple:
+    data_set = pd.read_csv(data_file_classification)
     data_set = data_set.drop(columns=['User ID'])  # remove user id column
 
     labels = feature_to_one_hot(data_set, 'Gender')
@@ -36,3 +38,13 @@ def get_data():
     x_test = standard_scalar.fit_transform(x_test)
     return x_train, x_test, y_train, y_test
 
+
+def get_data_regression() -> tuple:
+    data_set = pd.read_csv(data_file_regression)
+    data_set = data_set.drop(columns=['NAME'])  # remove name column
+
+    data_set = data_set.apply(pd.to_numeric, errors='coerce')
+    data_set.fillna(0, inplace=True)
+    y = data_set['MPG']
+    x = data_set.drop(columns=['MPG'])
+    return train_test_split(x, y, test_size=0.25, random_state=0)
