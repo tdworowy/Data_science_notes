@@ -1,14 +1,17 @@
 ''' https://raw.githubusercontent.com/PacktPublishing/40-Algorithms-Every-Programmer-Should-Know/master/Chapter07
 /Social_Network_Ads.csv
-'https://raw.githubusercontent.com/PacktPublishing/40-Algorithms-Every-Programmer-Should-Know/master/Chapter07/auto.csv'''
+'https://raw.githubusercontent.com/PacktPublishing/40-Algorithms-Every-Programmer-Should-Know/master/Chapter07/auto.csv
+https://github.com/PacktPublishing/40-Algorithms-Every-Programmer-Should-Know/blob/master/Chapter07/weather.csv'''
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import LabelEncoder
 from os import path
 
 data_file_classification = path.join(path.dirname(path.abspath(__file__)), '../data/Social_Network_Ads.csv')
 data_file_regression = path.join(path.dirname(path.abspath(__file__)), '../data/auto.csv')
+data_file_weather = path.join(path.dirname(path.abspath(__file__)), '../data/weather.csv')
 
 
 def feature_to_one_hot(data_set: pd.DataFrame, column: str) -> pd.DataFrame:
@@ -48,3 +51,25 @@ def get_data_regression() -> tuple:
     y = data_set['MPG']
     x = data_set.drop(columns=['MPG'])
     return train_test_split(x, y, test_size=0.25, random_state=0)
+
+
+def get_data_weather() -> tuple:
+    data_set = pd.read_csv(data_file_weather)
+    data_set['RainToday'] = data_set['RainToday'].apply(lambda x: 1 if x == "Yes" else 0)
+    data_set['RainTomorrow'] = data_set['RainTomorrow'].apply(lambda x: 1 if x == "Yes" else 0)
+
+    le = LabelEncoder()
+    data_set = data_set.dropna()
+    data_set.WindGustDir = le.fit_transform(data_set.WindGustDir)
+    data_set.WindDir3pm = le.fit_transform(data_set.WindDir3pm)
+    data_set.WindDir9am = le.fit_transform(data_set.WindDir9am)
+
+    x = data_set.drop(['Date', 'RainTomorrow'], axis=1)
+    y = data_set['RainTomorrow']
+    return train_test_split(x,y , test_size = 0.2,random_state = 2)
+
+
+
+
+
+
