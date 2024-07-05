@@ -61,16 +61,16 @@ def plot_blackjack(v, ax1, ax2):
 
     for ax in ax1, ax2:
         ax.set_zlim(-1, 1)
-        ax.set_ylabel('player sum')
-        ax.set_xlabel('dealer showing')
-        ax.set_zlabel('state-value')
+        ax.set_ylabel("player sum")
+        ax.set_xlabel("dealer showing")
+        ax.set_zlabel("state-value")
 
 
 if __name__ == "__main__":
     env = gym.make("Blackjack-v0")
     plt.style.use("ggplot")
 
-    fix, axes = plt.subplots(nrows=2, figsize=(5, 8), subplot_kw={'projection': '3d'})
+    fix, axes = plt.subplots(nrows=2, figsize=(5, 8), subplot_kw={"projection": "3d"})
     axes[0].set_title("value function without usable ace")
     axes[1].set_title("value function with usable ace")
 

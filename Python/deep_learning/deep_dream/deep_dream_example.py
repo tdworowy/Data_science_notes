@@ -12,10 +12,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 def resize_img(img, size):
     img = np.copy(img)
-    factors = (1,
-               float(size[0]) / img.shape[1],
-               float(size[0]) / img.shape[2],
-               1)
+    factors = (1, float(size[0]) / img.shape[1], float(size[0]) / img.shape[2], 1)
     return ndimage.zoom(img, factors, order=1)
 
 
@@ -40,33 +37,33 @@ def deprocess_image(x):
         x = x.reshape((x.shape[1], x.shape[2], 3))
         x /= 2
         x += 0.5
-        x *= 255,
-        x = np.clip(x, 0, 255).astype('uint8')
+        x *= (255,)
+        x = np.clip(x, 0, 255).astype("uint8")
     return x
 
 
 k.set_learning_phase(0)  # turn off training
-model = inception_v3.InceptionV3(weights='imagenet',include_top=False)
+model = inception_v3.InceptionV3(weights="imagenet", include_top=False)
 
 layer_contributions = {
-    'mixed2': 0.2,
-    'mixed3': 3.,
-    'mixed4': 2.,
-    'mixed5': 1.5,
+    "mixed2": 0.2,
+    "mixed3": 3.0,
+    "mixed4": 2.0,
+    "mixed5": 1.5,
 }
 
 layer_dict = dict([(layer.name, layer) for layer in model.layers])
-loss = k.variable(0.)
+loss = k.variable(0.0)
 
 for layer_name in layer_contributions:
     coeff = layer_contributions[layer_name]
     activation = layer_dict[layer_name].output
-    scaling = k.prod(k.cast(k.shape(activation), 'float32'))
-    loss.assign_add(coeff * k.sum(k.square(activation[:, 2: -2, 2: -2, :])) / scaling)
-   # loss += coeff * k.sum(k.square(activation[:, 2: -2, 2: -2, :])) / scaling  # L2 norm
+    scaling = k.prod(k.cast(k.shape(activation), "float32"))
+    loss.assign_add(coeff * k.sum(k.square(activation[:, 2:-2, 2:-2, :])) / scaling)
+# loss += coeff * k.sum(k.square(activation[:, 2: -2, 2: -2, :])) / scaling  # L2 norm
 
 dream = model.input
-grads = k.gradients(loss, dream)[0] # for some reason returns None
+grads = k.gradients(loss, dream)[0]  # for some reason returns None
 grads /= k.maximum(k.mean(k.abs(grads)), 1e-7)
 outputs = [loss, grads]
 fetch_loss_and_grads = k.function([dream], outputs)
@@ -102,7 +99,7 @@ original_shape = img.shape[1:3]
 successive_shapes = [original_shape]
 
 for i in range(1, num_octave):
-    shape = tuple([int(dim / (octave_scale ** i)) for dim in original_shape])
+    shape = tuple([int(dim / (octave_scale**i)) for dim in original_shape])
     successive_shapes.append(shape)
 successive_shapes = successive_shapes[::-1]
 
@@ -111,14 +108,11 @@ shrunk_original_img = resize_img(img, successive_shapes[0])
 
 for shape in successive_shapes:
     img = resize_img(img, shape)
-    img = gradient_ascent(img,
-                          iterations=iterations,
-                          step=step,
-                          max_loss=max_loss)
+    img = gradient_ascent(img, iterations=iterations, step=step, max_loss=max_loss)
     upscaled_shrunk_original_img = resize_img(shrunk_original_img, shape)
     same_size_original = resize_img(original_img, shape)
     lost_detail = same_size_original - upscaled_shrunk_original_img
     img += lost_detail
     shrunk_original_img = resize_img(original_img, shape)
-    save_img(img, fname=f'dream_at_scale_{str(shape)}.png')
-save_img(img, 'final_dream.png')
+    save_img(img, fname=f"dream_at_scale_{str(shape)}.png")
+save_img(img, "final_dream.png")

@@ -5,6 +5,7 @@ import random
 from datetime import datetime
 from keras import models, layers
 
+
 # alternatives, dueling q networks, recurrent q networks
 # TODO use Keras
 def pre_process_observation(obs):
@@ -18,7 +19,9 @@ def pre_process_observation(obs):
     return img.reshape(88, 80, 1)
 
 
-def epsilon_greedy(eps_min: float, eps_max: float, eps_decay_steps: float, action, step):
+def epsilon_greedy(
+    eps_min: float, eps_max: float, eps_decay_steps: float, action, step
+):
     epsilon = max(eps_min, eps_max - (eps_max - eps_min) * step / eps_decay_steps)
     if np.random.rand() < epsilon:
         return np.random.randint(n_outputs)
@@ -35,9 +38,13 @@ def sample_memories(batch_size):
 def generate_model():
     model = models.Sequential()
 
-    model.add(layers.Conv2D(32, kernel_size=(8, 8), stride=4, padding='SAME', input_shape=(150, 150, 3)))
-    model.add(layers.Conv2D(64, kernel_size=(4, 4), stride=2, padding='SAME'))
-    model.add(layers.Conv2D(64, kernel_size=(3, 3), stride=1, padding='SAME'))
+    model.add(
+        layers.Conv2D(
+            32, kernel_size=(8, 8), stride=4, padding="SAME", input_shape=(150, 150, 3)
+        )
+    )
+    model.add(layers.Conv2D(64, kernel_size=(4, 4), stride=2, padding="SAME"))
+    model.add(layers.Conv2D(64, kernel_size=(3, 3), stride=1, padding="SAME"))
     model.add(layers.Dense(128))
     model.add(layers.Dense(128))
     return model
@@ -83,16 +90,22 @@ if __name__ == "__main__":
             # env.render()
 
             obs = pre_process_observation(obs)
-            actions = mainQ_outputs.eval(feed_dict={X: [obs], in_training_mode: False})  # TODO change to Keras
+            actions = mainQ_outputs.eval(
+                feed_dict={X: [obs], in_training_mode: False}
+            )  # TODO change to Keras
 
             action = np.argmax(actions, axis=-1)
             actions_counter[str(action)] += 1
 
-            action = epsilon_greedy(eps_min, eps_max, eps_decay_steps, action, global_step)
+            action = epsilon_greedy(
+                eps_min, eps_max, eps_decay_steps, action, global_step
+            )
 
             next_obs, reward, done, _ = env.step(action)
 
-            exp_buffer.append([obs, action, pre_process_observation(next_obs), reward, done])
+            exp_buffer.append(
+                [obs, action, pre_process_observation(next_obs), reward, done]
+            )
 
             if global_step % steps_train == 0 and global_step > start_steps:
                 o_obs, o_act, o_next_obs, o_rew, o_done = sample_memories(batch_size)
@@ -102,18 +115,35 @@ if __name__ == "__main__":
 
                 # next actions
                 next_act = mainQ_outputs.eval(
-                    feed_dict={X: o_next_obs, in_training_mode: False})  # TODO change to Keras
+                    feed_dict={X: o_next_obs, in_training_mode: False}
+                )  # TODO change to Keras
 
                 # reward
-                y_batch = o_rew + discount_factor * np.max(next_act, axis=-1) * (1 - o_done)
+                y_batch = o_rew + discount_factor * np.max(next_act, axis=-1) * (
+                    1 - o_done
+                )
 
                 mrg_summary = merge_summary.eval(
-                    feed_dict={X: o_obs, y: np.expand_dims(y_batch, axis=-1), X_action: o_act, in_training_mode: False})
-                file_writer.add_summary(mrg_summary, global_step)  # TODO change to Keras
+                    feed_dict={
+                        X: o_obs,
+                        y: np.expand_dims(y_batch, axis=-1),
+                        X_action: o_act,
+                        in_training_mode: False,
+                    }
+                )
+                file_writer.add_summary(
+                    mrg_summary, global_step
+                )  # TODO change to Keras
 
-                train_loss, _ = sess.run([loss, training_op],
-                                         feed_dict={X: o_obs, y: np.expand_dims(y_batch, axis=-1), X_action: o_act,
-                                                    in_training_mode: True})  # TODO change to Keras
+                train_loss, _ = sess.run(
+                    [loss, training_op],
+                    feed_dict={
+                        X: o_obs,
+                        y: np.expand_dims(y_batch, axis=-1),
+                        X_action: o_act,
+                        in_training_mode: True,
+                    },
+                )  # TODO change to Keras
                 episodic_loss.append(train_loss)
 
             if (global_step + 1) % copy_steps == 0 and global_step > start_steps:
@@ -124,4 +154,9 @@ if __name__ == "__main__":
             global_step += 1
             episodic_reward += reward
 
-        print('Epoch', epoch, 'Reward', episodic_reward, )
+        print(
+            "Epoch",
+            epoch,
+            "Reward",
+            episodic_reward,
+        )

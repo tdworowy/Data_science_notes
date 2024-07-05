@@ -4,7 +4,7 @@ from math import sqrt
 from Python.basic.data_preparation import get_data_regression
 from matplotlib import pyplot as plt
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     x_train, x_test, y_train, y_test = get_data_regression()
 
     regressor = DecisionTreeRegressor(max_depth=3)
@@ -15,6 +15,5 @@ if __name__ == '__main__':
     print(error_standard_deviation)
 
     fig = plt.figure(figsize=(15, 10))
-    _ = plot_tree(regressor,
-                  filled=True)
+    _ = plot_tree(regressor, filled=True)
     plt.show(fig)

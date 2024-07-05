@@ -6,7 +6,9 @@ from keras.utils import to_categorical
 
 from vizualization import plt_loss, plt_accuracy, plt_accuracy_html, plt_loss_html
 
-(train_data, train_labels), (test_data, test_labels) = reuters.load_data(num_words=20000)
+(train_data, train_labels), (test_data, test_labels) = reuters.load_data(
+    num_words=20000
+)
 
 
 def get_plain_text(article):
@@ -41,25 +43,42 @@ y_test = to_one_hot(test_labels)
 
 """regularizers.l2 and layers.Dropout are use to prevent overfitting """
 model = models.Sequential()
-model.add(layers.Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001), input_shape=(20000,)))
+model.add(
+    layers.Dense(
+        64,
+        activation="relu",
+        kernel_regularizer=regularizers.l2(0.001),
+        input_shape=(20000,),
+    )
+)
 model.add(layers.Dropout(0.3))
-model.add(layers.Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001)))
+model.add(
+    layers.Dense(64, activation="relu", kernel_regularizer=regularizers.l2(0.001))
+)
 model.add(layers.Dropout(0.3))
-model.add(layers.Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001)))
-model.add(layers.Dense(46, activation='softmax'))
+model.add(
+    layers.Dense(64, activation="relu", kernel_regularizer=regularizers.l2(0.001))
+)
+model.add(layers.Dense(46, activation="softmax"))
 
 x_val = x_train[:1000]
 partial_x_train = x_train[1000:]
 y_val = y_train[:1000]
 partial_y_train = y_train[1000:]
 
-model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['acc'])
-history = model.fit(partial_x_train, partial_y_train, epochs=15, batch_size=512, validation_data=(x_val, y_val))
+model.compile(optimizer="rmsprop", loss="categorical_crossentropy", metrics=["acc"])
+history = model.fit(
+    partial_x_train,
+    partial_y_train,
+    epochs=15,
+    batch_size=512,
+    validation_data=(x_val, y_val),
+)
 
-acc = history.history['acc']
-val_acc = history.history['val_acc']
-loss = history.history['loss']
-val_loss = history.history['val_loss']
+acc = history.history["acc"]
+val_acc = history.history["val_acc"]
+loss = history.history["loss"]
+val_loss = history.history["val_loss"]
 epochs = range(1, len(acc) + 1)
 
 plt_l = plt_loss_html(epochs, loss, val_loss)

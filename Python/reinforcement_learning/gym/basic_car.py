@@ -1,12 +1,25 @@
 import gym
 import random
-import retro # TODO find list of games
-env = gym.make("CarRacing-v0") # TODO change game
+import retro  # TODO find list of games
+
+env = gym.make("CarRacing-v0")  # TODO change game
 
 # env.configure(remotes=1)
-left = [("KeyEvent", "ArrowUp", True), ("KeyEvent", "ArrowLeft", True), ("KeyEvent", "ArrowRight", False)]
-right = [("KeyEvent", "ArrowUp", True), ("KeyEvent", "ArrowLeft", False), ("KeyEvent", "ArrowRight", True)]
-forward = [("KeyEvent", "ArrowUp", True), ("KeyEvent", "ArrowLeft", False), ("KeyEvent", "ArrowRight", False)]
+left = [
+    ("KeyEvent", "ArrowUp", True),
+    ("KeyEvent", "ArrowLeft", True),
+    ("KeyEvent", "ArrowRight", False),
+]
+right = [
+    ("KeyEvent", "ArrowUp", True),
+    ("KeyEvent", "ArrowLeft", False),
+    ("KeyEvent", "ArrowRight", True),
+]
+forward = [
+    ("KeyEvent", "ArrowUp", True),
+    ("KeyEvent", "ArrowLeft", False),
+    ("KeyEvent", "ArrowRight", False),
+]
 
 turn = 0
 rewards = []
@@ -25,7 +38,7 @@ while True:
     if len(rewards) >= buffer_size:
         mean = sum(rewards) / len(rewards)
 
-        if mean ==0:
+        if mean == 0:
             turn = 20
             if random.random() < 0.5:
                 action = right

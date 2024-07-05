@@ -17,7 +17,7 @@ for i, sample in enumerate(samples):
         results[i, j, index] = 1
 print("WORDS")
 print(results)
-print("*"*50)
+print("*" * 50)
 """Hot one encode character"""
 
 import string

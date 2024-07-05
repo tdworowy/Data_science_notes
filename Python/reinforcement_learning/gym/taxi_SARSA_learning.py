@@ -10,9 +10,20 @@ def get_q(env) -> dict:
     return q
 
 
-def calculate_q(q: dict, state, action, next_action, reward: int, next_state, alpha: float, gamma: float) -> dict:
+def calculate_q(
+    q: dict,
+    state,
+    action,
+    next_action,
+    reward: int,
+    next_state,
+    alpha: float,
+    gamma: float,
+) -> dict:
     q = q.copy()
-    q[(state, action)] += alpha * (reward + gamma * q[(next_state, next_action)] - q[(state, action)])
+    q[(state, action)] += alpha * (
+        reward + gamma * q[(next_state, next_action)] - q[(state, action)]
+    )
     return q
 
 
@@ -38,17 +49,19 @@ if __name__ == "__main__":
 
         action = epsilon_greedy_policy(env, q, state, epsilon)
         while True:
-           # env.render()
+            # env.render()
             next_state, reward, done, _ = env.step(action)
             next_action = epsilon_greedy_policy(env, q, state, epsilon)
-            q = calculate_q(q=q,
-                            state=state,
-                            action=action,
-                            next_action = next_action,
-                            reward=reward,
-                            next_state=next_state,
-                            alpha=alpha,
-                            gamma=gamma)
+            q = calculate_q(
+                q=q,
+                state=state,
+                action=action,
+                next_action=next_action,
+                reward=reward,
+                next_state=next_state,
+                alpha=alpha,
+                gamma=gamma,
+            )
 
             action = next_action
             state = next_state

@@ -5,7 +5,7 @@ from sklearn.linear_model import LogisticRegression
 
 from Python.basic.utils import calculate_metrics
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     x_train, x_test, y_train, y_test = get_data_weather()
 
     model = LogisticRegression(max_iter=900)
@@ -16,4 +16,4 @@ if __name__ == '__main__':
     cm = confusion_matrix(y_test, y_pred)
     print(cm)
     accuracy, recall, precision = calculate_metrics(cm)
-    print(f'accuracy:{accuracy}, recall:{recall}, precision: {precision}')
+    print(f"accuracy:{accuracy}, recall:{recall}, precision: {precision}")

@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     df = pd.DataFrame()
     for i in range(num_banner):
-        df[f'Banner_type_{i}'] = np.random.randint(0, 2, 100000)
+        df[f"Banner_type_{i}"] = np.random.randint(0, 2, 100000)
 
     num_of_iterations = 100000
     banner_selected = []
@@ -33,9 +33,9 @@ if __name__ == "__main__":
 
         count[banner] += 1
         sum_reward[banner] += reward
-        q[banner] = sum_reward[banner]/count[banner]
+        q[banner] = sum_reward[banner] / count[banner]
 
         banner_selected.append(banner)
-        
+
     sns.distplot(banner_selected)
     plt.show()

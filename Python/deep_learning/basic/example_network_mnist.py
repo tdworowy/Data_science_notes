@@ -17,27 +17,29 @@ plt.show()
 def get_model_sequential():
     network = models.Sequential()
     # network.add(layers.Dense(512, activation='relu', input_shape=(28 * 28,)))
-    network.add(layers.Dense(256, activation='relu', input_shape=(28 * 28,)))
-    network.add(layers.Dense(10, activation='softmax'))
+    network.add(layers.Dense(256, activation="relu", input_shape=(28 * 28,)))
+    network.add(layers.Dense(10, activation="softmax"))
     return network
 
 
 def get_model_api_interface():
     input_tensor = layers.Input(shape=(784,))
-    x = layers.Dense(32, activation='relu')(input_tensor)
-    output_tensor = layers.Dense(10, activation='softmax')(x)
+    x = layers.Dense(32, activation="relu")(input_tensor)
+    output_tensor = layers.Dense(10, activation="softmax")(x)
     return models.Model(inputs=input_tensor, outputs=output_tensor)
 
 
-#network = get_model_sequential()
+# network = get_model_sequential()
 network = get_model_api_interface()
-network.compile(optimizer="rmsprop", loss="categorical_crossentropy", metrics=['accuracy'])
+network.compile(
+    optimizer="rmsprop", loss="categorical_crossentropy", metrics=["accuracy"]
+)
 
 train_images = train_images.reshape((60000, 28 * 28))
-train_images = train_images.astype('float32') / 255
+train_images = train_images.astype("float32") / 255
 
 test_images = test_images.reshape((10000, 28 * 28))
-test_images = test_images.astype('float32') / 255
+test_images = test_images.astype("float32") / 255
 
 print(f"Train new shape: {train_images.shape}")
 print(f"Test new shape: {test_images.shape}")

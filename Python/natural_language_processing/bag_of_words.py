@@ -13,21 +13,25 @@ def generate_corpus(data_set: pd.DataFrame, column: str, sample_size: int) -> li
     corpus = []
     ps = PorterStemmer()
     for i in range(sample_size):
-        line = re.sub('[^a-zA-Z]', ' ', data_set[column][i])
+        line = re.sub("[^a-zA-Z]", " ", data_set[column][i])
         line = line.lower()
 
-        line = [ps.stem(word) for word in line.split() if word not in set(stopwords.words('english'))]
-        line = ' '.join(line)
+        line = [
+            ps.stem(word)
+            for word in line.split()
+            if word not in set(stopwords.words("english"))
+        ]
+        line = " ".join(line)
         corpus.append(line)
     return corpus
 
 
-if __name__ == '__main__':
-    nltk.download('stopwords')
+if __name__ == "__main__":
+    nltk.download("stopwords")
 
-    data_set = pd.read_csv("../data/reviews.tsv", delimiter='\t', quoting=3)
+    data_set = pd.read_csv("../data/reviews.tsv", delimiter="\t", quoting=3)
 
-    corpus = generate_corpus(data_set, 'Review', sample_size=data_set.shape[0])
+    corpus = generate_corpus(data_set, "Review", sample_size=data_set.shape[0])
 
     cv = CountVectorizer(max_features=2000)
     x = cv.fit_transform(corpus).toarray()

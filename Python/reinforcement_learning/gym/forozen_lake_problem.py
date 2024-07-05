@@ -4,6 +4,7 @@ import numpy as np
 
 # Dynamic programing, markov decision process and  Bellman equation
 
+
 def value_iterations(env, gamma: float = 1.0) -> np.array:
     value_table = np.zeros(env.observation_space.n)
     threshold = 1e-20
@@ -19,7 +20,12 @@ def value_iterations(env, gamma: float = 1.0) -> np.array:
 
                 for next_sr in env.P[state][action]:
                     trans_prob, next_state, reward_prob, _ = next_sr
-                    next_states_rewards.append((trans_prob * (reward_prob + gamma * updated_value_table[next_state])))
+                    next_states_rewards.append(
+                        (
+                            trans_prob
+                            * (reward_prob + gamma * updated_value_table[next_state])
+                        )
+                    )
 
                 q_value.append(np.sum(next_states_rewards))
             value_table[state] = max(q_value)
@@ -40,8 +46,12 @@ def compute_value_function(policy, gamma: float = 1.0):
 
         for state in range(env.nS):
             action = policy[state]
-            value_table[state] = sum([trans_prob * (reward_prob + gamma * updated_value_table[next_state])
-                                      for trans_prob, next_state, reward_prob, _ in env.P[state][action]])
+            value_table[state] = sum(
+                [
+                    trans_prob * (reward_prob + gamma * updated_value_table[next_state])
+                    for trans_prob, next_state, reward_prob, _ in env.P[state][action]
+                ]
+            )
 
         if np.sum((np.fabs(updated_value_table - value_table))) <= threshold:
             break
@@ -58,7 +68,9 @@ def extract_policy(env, value_table, gamma: float = 1.0):
 
             for next_sr in env.P[state][action]:
                 trans_prob, next_state, reward_prob, _ = next_sr
-                q_table[action] += (trans_prob * (reward_prob + gamma * value_table[next_state]))
+                q_table[action] += trans_prob * (
+                    reward_prob + gamma * value_table[next_state]
+                )
 
         policy[state] = np.argmax(q_table)
     return policy
@@ -72,7 +84,7 @@ def policy_iteration(env, gamma: float = 1.0):
         new_policy = extract_policy(env, new_value_function, gamma)
 
         if np.all(old_policy == new_policy):
-            print(f'Policy-Iteration converged at step {i}')
+            print(f"Policy-Iteration converged at step {i}")
             break
         else:
             i += 1

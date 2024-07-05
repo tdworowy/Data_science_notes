@@ -17,7 +17,7 @@ def thompson_sampling(reward: int, arm: int) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    env = gym.make('BanditTenArmedGaussian-v0')
+    env = gym.make("BanditTenArmedGaussian-v0")
     num_rounds = 20000
     count = np.zeros(10)
     sum_rewards = np.zeros(10)

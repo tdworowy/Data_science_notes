@@ -8,7 +8,6 @@ right_input = Input(shape=(None, 128))
 right_output = lstm(right_input)
 
 merged = layers.concatenate([left_output, right_output], axis=-1)
-predictions = layers.Dense(1, activation='sigmoid')(merged)
+predictions = layers.Dense(1, activation="sigmoid")(merged)
 
 model = Model([left_input, right_input], predictions)
-

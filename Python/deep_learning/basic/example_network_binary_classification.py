@@ -29,25 +29,42 @@ y_test = np.asarray(test_labels)
 
 """regularizers.l2 and layers.Dropout are use to prevent overfitting """
 model = models.Sequential()
-model.add(layers.Dense(16, activation='relu', kernel_regularizer=regularizers.l2(0.001), input_shape=(10000,)))
+model.add(
+    layers.Dense(
+        16,
+        activation="relu",
+        kernel_regularizer=regularizers.l2(0.001),
+        input_shape=(10000,),
+    )
+)
 model.add(layers.Dropout(0.5))
-model.add(layers.Dense(16, activation='relu', kernel_regularizer=regularizers.l2(0.001)))
+model.add(
+    layers.Dense(16, activation="relu", kernel_regularizer=regularizers.l2(0.001))
+)
 model.add(layers.Dropout(0.5))
-model.add(layers.Dense(16, activation='relu', kernel_regularizer=regularizers.l2(0.001)))
+model.add(
+    layers.Dense(16, activation="relu", kernel_regularizer=regularizers.l2(0.001))
+)
 model.add(layers.Dropout(0.5))
-model.add(layers.Dense(1, activation='sigmoid'))
+model.add(layers.Dense(1, activation="sigmoid"))
 
 x_val = x_train[:10000]
 partial_x_train = x_train[10000:]
 y_val = y_train[:10000]
 partial_y_train = y_train[10000:]
 
-model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
-history = model.fit(partial_x_train, partial_y_train, epochs=10, batch_size=512, validation_data=(x_val, y_val))
-acc = history.history['acc']
-val_acc = history.history['val_acc']
-loss = history.history['loss']
-val_loss = history.history['val_loss']
+model.compile(optimizer="rmsprop", loss="binary_crossentropy", metrics=["acc"])
+history = model.fit(
+    partial_x_train,
+    partial_y_train,
+    epochs=10,
+    batch_size=512,
+    validation_data=(x_val, y_val),
+)
+acc = history.history["acc"]
+val_acc = history.history["val_acc"]
+loss = history.history["loss"]
+val_loss = history.history["val_loss"]
 epochs = range(1, len(acc) + 1)
 
 plt_loss(epochs, loss, val_loss).show()

@@ -7,7 +7,7 @@ import gym_bandits
 import numpy as np
 
 
-def softmax(tau: float, q:  np.ndarray) -> Union[int, np.ndarray]:
+def softmax(tau: float, q: np.ndarray) -> Union[int, np.ndarray]:
     total = sum([math.exp(val / tau) for val in q])
     probs = [math.exp(val / tau) / total for val in q]
     threshold = random.random()
@@ -21,7 +21,7 @@ def softmax(tau: float, q:  np.ndarray) -> Union[int, np.ndarray]:
 
 
 if __name__ == "__main__":
-    env = gym.make('BanditTenArmedGaussian-v0')
+    env = gym.make("BanditTenArmedGaussian-v0")
 
     num_rounds = 20000
     count = np.zeros(10)

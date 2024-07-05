@@ -4,7 +4,7 @@ import gym_bandits
 import numpy as np
 
 
-def upper_confidence_bound(iters, count:  np.ndarray, q:  np.ndarray) -> np.ndarray:
+def upper_confidence_bound(iters, count: np.ndarray, q: np.ndarray) -> np.ndarray:
     ucb = np.zeros(10)
     if iters < 10:
         return iters
@@ -17,7 +17,7 @@ def upper_confidence_bound(iters, count:  np.ndarray, q:  np.ndarray) -> np.ndar
 
 
 if __name__ == "__main__":
-    env = gym.make('BanditTenArmedGaussian-v0')
+    env = gym.make("BanditTenArmedGaussian-v0")
 
     num_rounds = 20000
     count = np.zeros(10)

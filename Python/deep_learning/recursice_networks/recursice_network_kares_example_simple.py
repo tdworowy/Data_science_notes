@@ -19,18 +19,17 @@ model.add(SimpleRNN(32, return_sequences=True))
 model.add(SimpleRNN(32, return_sequences=True))
 model.add(SimpleRNN(32, return_sequences=True))
 model.add(SimpleRNN(32))
-model.add(Dense(1, activation='sigmoid'))
-model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
+model.add(Dense(1, activation="sigmoid"))
+model.compile(optimizer="rmsprop", loss="binary_crossentropy", metrics=["acc"])
 
-history = model.fit(input_train, y_train,
-                    epochs=10,
-                    batch_size=128,
-                    validation_split=0.2)
+history = model.fit(
+    input_train, y_train, epochs=10, batch_size=128, validation_split=0.2
+)
 
-acc = history.history['acc']
-val_acc = history.history['val_acc']
-loss = history.history['loss']
-val_loss = history.history['val_loss']
+acc = history.history["acc"]
+val_acc = history.history["val_acc"]
+loss = history.history["loss"]
+val_loss = history.history["val_loss"]
 epochs = range(1, len(acc) + 1)
 
 plt_loss(epochs, loss, val_loss).show()

@@ -1,4 +1,5 @@
 import numpy as np
+
 """Random example"""
 time_steps = 100
 input_features = 32

@@ -14,23 +14,26 @@ def remove_white_spaces(data_set: pd.DataFrame):
     data_set.drop(blanks, inplace=True)
 
 
-if __name__ == '__main__':
-    data_set = pd.read_csv("../data/movies.tsv", delimiter='\t', quoting=3)
-    data_set.dropna(inplace=True) # remove NAs
+if __name__ == "__main__":
+    data_set = pd.read_csv("../data/movies.tsv", delimiter="\t", quoting=3)
+    data_set.dropna(inplace=True)  # remove NAs
 
     remove_white_spaces(data_set)
 
-    x = data_set['review']
-    y = data_set['label']
+    x = data_set["review"]
+    y = data_set["label"]
 
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.20)
 
-    text_clf_nb = Pipeline([('tfidf', TfidfVectorizer()),
-                            ('clf', MultinomialNB()),
-                            ])
+    text_clf_nb = Pipeline(
+        [
+            ("tfidf", TfidfVectorizer()),
+            ("clf", MultinomialNB()),
+        ]
+    )
     text_clf_nb.fit(x_train, y_train)
-    
+
     y_pred = text_clf_nb.predict(x_test)
 
     print(confusion_matrix(y_test, y_pred))
-    print(classification_report(y_test,y_pred))
+    print(classification_report(y_test, y_pred))

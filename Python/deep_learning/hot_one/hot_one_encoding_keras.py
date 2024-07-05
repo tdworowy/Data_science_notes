@@ -5,7 +5,7 @@ tokenizer = Tokenizer(num_words=1000)
 tokenizer.fit_on_texts(samples)
 sequence = tokenizer.texts_to_sequences(samples)
 
-one_hot_results = tokenizer.texts_to_matrix(samples, mode='binary')
+one_hot_results = tokenizer.texts_to_matrix(samples, mode="binary")
 
 print(sequence)
 print(one_hot_results)

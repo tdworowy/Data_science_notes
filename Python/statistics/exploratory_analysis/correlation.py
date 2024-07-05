@@ -12,5 +12,7 @@ if __name__ == "__main__":
     print(f"Correlation between TAX and B: {correlation}")
 
     # scatter plot
-    boston.plot.scatter(x="TAX", y="B") # x and y are columns names from boston data frame
+    boston.plot.scatter(
+        x="TAX", y="B"
+    )  # x and y are columns names from boston data frame
     plt.show()

@@ -16,10 +16,19 @@ test_data /= std
 
 def build_model():
     model = models.Sequential()
-    model.add(layers.Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001), input_shape=(train_data.shape[1],)))
-    model.add(layers.Dense(64, activation='relu', kernel_regularizer=regularizers.l2(0.001)))
+    model.add(
+        layers.Dense(
+            64,
+            activation="relu",
+            kernel_regularizer=regularizers.l2(0.001),
+            input_shape=(train_data.shape[1],),
+        )
+    )
+    model.add(
+        layers.Dense(64, activation="relu", kernel_regularizer=regularizers.l2(0.001))
+    )
     model.add(layers.Dense(1))
-    model.compile(optimizer='rmsprop', loss='mse', metrics=['mae'])
+    model.compile(optimizer="rmsprop", loss="mse", metrics=["mae"])
     return model
 
 
@@ -30,25 +39,34 @@ num_epochs = 100
 all_mean_histories = []
 
 for i in range(k):
-    print('processing flod #', i)
-    val_data = train_data[i * num_val_samples:(i + 1) * num_val_samples]
-    val_targets = train_targets[i * num_val_samples:(i + 1) * num_val_samples]
+    print("processing flod #", i)
+    val_data = train_data[i * num_val_samples : (i + 1) * num_val_samples]
+    val_targets = train_targets[i * num_val_samples : (i + 1) * num_val_samples]
 
     partial_train_data = np.concatenate(
-        [train_data[:i * num_val_samples],
-         train_data[(i + 1) * num_val_samples:]],
-        axis=0)
+        [train_data[: i * num_val_samples], train_data[(i + 1) * num_val_samples :]],
+        axis=0,
+    )
 
     partial_train_targets = np.concatenate(
-        [train_targets[:i * num_val_samples],
-         train_targets[(i + 1) * num_val_samples:]],
-        axis=0)
+        [
+            train_targets[: i * num_val_samples],
+            train_targets[(i + 1) * num_val_samples :],
+        ],
+        axis=0,
+    )
 
     model = build_model()
-    history = model.fit(partial_train_data, partial_train_targets, epochs=num_epochs, batch_size=16,
-                        validation_data=(val_data, val_targets), verbose=0)
+    history = model.fit(
+        partial_train_data,
+        partial_train_targets,
+        epochs=num_epochs,
+        batch_size=16,
+        validation_data=(val_data, val_targets),
+        verbose=0,
+    )
 
-    mean_history = history.history['val_mae']
+    mean_history = history.history["val_mae"]
     print(f"mean_history: {mean_history}")
     all_mean_histories.append(mean_history)
 
@@ -65,6 +83,7 @@ plt.show()
 
 
 # Chart 2 smooth (without first 10 observations)
+
 
 def smooth_curve(points, factor=0.9):
     smooth_points = []

@@ -18,13 +18,7 @@ def run(algorithm, algorithm_name, env, algorithm_args_names, algorithm_args_out
     reward = 0
     arm = 0
 
-    alg_args_dict = {
-        "count": count,
-        "q": q,
-        "env": env,
-        "reward": reward,
-        "arm": arm
-    }
+    alg_args_dict = {"count": count, "q": q, "env": env, "reward": reward, "arm": arm}
 
     alg_args_dict.update(algorithm_args_outer)
 
@@ -45,16 +39,36 @@ def run(algorithm, algorithm_name, env, algorithm_args_names, algorithm_args_out
 
 
 if __name__ == "__main__":
-    env = gym.make('BanditTenArmedGaussian-v0')
+    env = gym.make("BanditTenArmedGaussian-v0")
 
-    run(algorithm=epsilon_greedy_policy, algorithm_name="epsilon greedy policy", env=env,
-        algorithm_args_names=["env", "q", "epsilon"], algorithm_args_outer={"epsilon": 0.5})
+    run(
+        algorithm=epsilon_greedy_policy,
+        algorithm_name="epsilon greedy policy",
+        env=env,
+        algorithm_args_names=["env", "q", "epsilon"],
+        algorithm_args_outer={"epsilon": 0.5},
+    )
 
-    run(algorithm=upper_confidence_bound, algorithm_name="upper confidence bound", env=env,
-        algorithm_args_names=["iters", "count", "q"], algorithm_args_outer={})
+    run(
+        algorithm=upper_confidence_bound,
+        algorithm_name="upper confidence bound",
+        env=env,
+        algorithm_args_names=["iters", "count", "q"],
+        algorithm_args_outer={},
+    )
 
-    run(algorithm=softmax, algorithm_name="softmax", env=env,
-        algorithm_args_names=["tau", "q"], algorithm_args_outer={"tau": 0.5})
+    run(
+        algorithm=softmax,
+        algorithm_name="softmax",
+        env=env,
+        algorithm_args_names=["tau", "q"],
+        algorithm_args_outer={"tau": 0.5},
+    )
 
-    run(algorithm=thompson_sampling, algorithm_name="thompson sampling", env=env,
-        algorithm_args_names=["reward", "arm"], algorithm_args_outer={})
+    run(
+        algorithm=thompson_sampling,
+        algorithm_name="thompson sampling",
+        env=env,
+        algorithm_args_names=["reward", "arm"],
+        algorithm_args_outer={},
+    )

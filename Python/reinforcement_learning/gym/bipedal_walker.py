@@ -1,4 +1,5 @@
 import gym
+
 env = gym.make("BipedalWalker-v3")
 
 for episode in range(100):

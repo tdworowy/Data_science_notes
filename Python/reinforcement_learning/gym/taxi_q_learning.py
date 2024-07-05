@@ -10,7 +10,16 @@ def get_q(env) -> dict:
     return q
 
 
-def update_q_table(env, q: dict, prev_state, action, reward: int, next_state, alpha: float, gamma: float) -> dict:
+def update_q_table(
+    env,
+    q: dict,
+    prev_state,
+    action,
+    reward: int,
+    next_state,
+    alpha: float,
+    gamma: float,
+) -> dict:
     q = q.copy()
     qa = max([q[next_state, _action] for _action in range(env.action_space.n)])
     q[(prev_state, action)] += alpha * (reward + gamma * qa - q[prev_state, action])
@@ -38,18 +47,20 @@ if __name__ == "__main__":
         prev_state = env.reset()
 
         while True:
-            #env.render()
+            # env.render()
             action = epsilon_greedy_policy(env, q, prev_state, epsilon)
             next_state, reward, done, _ = env.step(action)
 
-            q = update_q_table(env=env,
-                               q=q,
-                               prev_state=prev_state,
-                               action=action,
-                               reward=reward,
-                               next_state=next_state,
-                               alpha=alpha,
-                               gamma=gamma)
+            q = update_q_table(
+                env=env,
+                q=q,
+                prev_state=prev_state,
+                action=action,
+                reward=reward,
+                next_state=next_state,
+                alpha=alpha,
+                gamma=gamma,
+            )
 
             prev_state = next_state
             total_reward += reward

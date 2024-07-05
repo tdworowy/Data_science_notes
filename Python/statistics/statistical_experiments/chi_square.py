@@ -7,7 +7,9 @@ import pandas as pd
 def chi_square(observed: list, expected: list) -> np.ndarray:
     pearson_residuals = []
     for row, expected in zip(observed, expected):
-        pearson_residuals.append([(observed - expected) ** 2 / expected for observed in row])
+        pearson_residuals.append(
+            [(observed - expected) ** 2 / expected for observed in row]
+        )
 
     return np.sum(pearson_residuals)
 
@@ -16,18 +18,16 @@ def perm_fun(box: list, expected: list) -> np.ndarray:
     sample_clicks = [
         sum(sample(box, 1000)),
         sum(sample(box, 1000)),
-        sum(sample(box, 1000))
+        sum(sample(box, 1000)),
     ]
-    sample_no_clicks = [
-        1000 - n for n in sample_clicks
-    ]
+    sample_no_clicks = [1000 - n for n in sample_clicks]
     return chi_square([sample_clicks, sample_no_clicks], expected)
 
 
 if __name__ == "__main__":
     file = "../../data/statistics/click_rates.csv"
     data = pd.read_csv(file)
-    clicks = data.pivot(index='Click', columns='Headline', values='Rate')
+    clicks = data.pivot(index="Click", columns="Headline", values="Rate")
 
     box = [1] * 34
     box.extend([0] * 2966)

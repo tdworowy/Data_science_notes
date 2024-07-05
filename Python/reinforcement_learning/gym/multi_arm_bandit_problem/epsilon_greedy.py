@@ -13,7 +13,7 @@ def epsilon_greedy_policy(env, q: np.ndarray, epsilon: float) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    env = gym.make('BanditTenArmedGaussian-v0')
+    env = gym.make("BanditTenArmedGaussian-v0")
     num_rounds = 20000
     count = np.zeros(10)
     q = np.zeros(10)
